@@ -6,15 +6,10 @@ session_start();
         $empId = $_GET['id'];
     
         // Prepare and execute the SQL query
-        $selQuery = "SELECT employee_tbl.*, 
-            emp_additional_tbl.* 
-            FROM employee_tbl
-            LEFT JOIN emp_additional_tbl 
-            ON emp_additional_tbl.emp_id = employee_tbl.emp_id 
-            WHERE 
-            employee_tbl.emp_status='Active' 
-            AND
-            employee_tbl.emp_id= '$empId'";
+        $selQuery = "SELECT employee_tbl.*, emp_additional_tbl.*,role_tbl.* FROM employee_tbl
+LEFT JOIN emp_additional_tbl ON emp_additional_tbl.emp_id = employee_tbl.emp_id 
+LEFT JOIN role_tbl ON role_tbl.role_id=emp_additional_tbl.emp_role 
+WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
         
         $result1 = $conn->query($selQuery);
     
@@ -30,7 +25,7 @@ session_start();
             $company_email=$row['emp_company_email'];
             $address=$row['emp_address'];
             $mobile=$row['emp_mobile'];
-            $role=$row['emp_role'];
+            $role=$row['role_name'];
             $joining_date=$row['emp_joining_date'];
             $pay_role=$row['emp_pay_role'];
             $name=$fname." ".$lname;    
