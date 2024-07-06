@@ -2,11 +2,11 @@
 session_start();
     include("db/dbConnection.php");
     
-  echo  $selQuery = "SELECT employee_tbl.*, emp_additional_tbl.*,role_tbl.* FROM employee_tbl
+   $selQuery = "SELECT employee_tbl.*, emp_additional_tbl.*,role_tbl.* FROM employee_tbl
 LEFT JOIN emp_additional_tbl ON emp_additional_tbl.emp_id = employee_tbl.emp_id 
 LEFT JOIN role_tbl ON role_tbl.role_id=emp_additional_tbl.emp_role 
 WHERE employee_tbl.emp_status='Active'";
-    exit;
+    
     $resQuery = mysqli_query($conn , $selQuery); 
     
 ?>
@@ -52,25 +52,25 @@ WHERE employee_tbl.emp_status='Active'";
 										<th>Name</th>
 										<th>Mobile</th>
 										<th>Email</th>
-										<!-- <th>Role</th> -->
+										<th>Role</th>
 										<th>Action</th>
 										
 									</tr>
 								</thead>
 								<tbody>
                                 <?php $i=1; while($row = mysqli_fetch_array($resQuery , MYSQLI_ASSOC)) { 
-                            echo 
+                           
                             $emp_id   = $row['emp_id'];     
                             $emp_first_name  = $row['emp_first_name'];  
                             $emp_last_name   = $row['emp_last_name'];  
                             $email          = $row['emp_company_email'];
                             $address        = $row['emp_address'];   
-                            // $role        = $row['emp_role'];   
+                             $role        = $row['emp_role'];   
                             $jDate    = $row['emp_joining_date'];
                             $mobile   =$row['emp_mobile'];
                             $date=date_create($jDate);
                             $name=$emp_first_name.' '.$emp_last_name;
-exit;
+
                       date_format($date,"Y/m/d H:i:s");
                       ?>
                       <tr>
@@ -78,7 +78,7 @@ exit;
                       <td><?php echo $name; ?></td>
                       <td><?php echo $mobile; ?></td>
                       <td><?php echo $email; ?></td>
-                      <!-- <td><?php echo $role; ?></td> -->
+                      <td><?php echo $role; ?></td>
                       <td>
                           <button type="button" class="btn btn-circle btn-warning text-white modalBtn" onclick="goEditEmp(<?php echo $emp_id; ?>);" data-bs-toggle="modal" data-bs-target="#editEmployeeModal"><i class='bi bi-pencil-square'></i></button>
                           <button class="btn btn-circle btn-success text-white " onclick="goViewEmp(<?php echo $emp_id; ?>);" >View</button>
