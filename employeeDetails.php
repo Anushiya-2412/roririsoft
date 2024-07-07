@@ -28,7 +28,10 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
             $role=$row['role_name'];
             $joining_date=$row['emp_joining_date'];
             $pay_role=$row['emp_pay_role'];
-            $name=$fname." ".$lname;    
+			$emp_img = $row['emp_img'];
+            $name=$fname." ".$lname; 
+			// Construct the image path
+			$image_path = "image/Employee/" . $emp_img;   
     
         } else {
             echo "Error executing query: " . $conn->error;
@@ -94,7 +97,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 								<div class="card">
 									<div class="card-body">
 										<div class="d-flex flex-column align-items-center text-center">
-											<img src="assets/images/avatars/avatar-2.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
+											<img src="<?php echo $image_path; ?>" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
 											<div class="mt-3">
 												<h4><?php echo $name; ?></h4>
 												<p class="text-secondary mb-1"><?php echo $role;?></p>

@@ -35,7 +35,7 @@ WHERE employee_tbl.emp_status='Active'";
                 <div class="page-title-right">
                     <h4 class="page-title">Employee</h4>
                     <div class="position-relative" style="height: 80px;"> <!-- Adjust height as needed -->
-                    <button type="button" class="btn btn-primary position-absolute top-0 end-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Employee</button>
+                    <button type="button" id="addEmpBtn" class="btn btn-primary position-absolute top-0 end-0" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Add New Employee</button>
                     </div>
 
                 </div>
@@ -180,6 +180,7 @@ WHERE employee_tbl.emp_status='Active'";
      <!-- Include Bootstrap JS (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
         function goViewEmp(id){
             alert(id);
@@ -202,7 +203,70 @@ WHERE employee_tbl.emp_status='Active'";
 			table.buttons().container()
 				.appendTo( '#example2_wrapper .col-md-6:eq(0)' );
 		} );
-	</script>
+</script>
+<script>
+        $(document).ready(function () {
+            $('#submitBtn').click(function () {
+                $('#addEmployee').submit();
+            });
+
+            $('#addEmployee').off('submit').on('submit', function(e) {
+                e.preventDefault(); // Prevent the form from submitting normally
+
+                var formData = new FormData(this);
+                $.ajax({
+                    url: "action/actEmployee.php",
+                    method: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                                timer: 2000
+                            }).then(function() {
+                                $('#addEmployeeModal').modal('hide'); // Close the modal
+                                $('.modal-backdrop').remove(); // Remove the backdrop
+                                setTimeout(function() {
+                                    $('#example2').load(location.href + ' #example2 > *', function() {
+                                        $('#example2').DataTable().destroy();
+                                        $('#example2').DataTable({
+                                            "paging": true,
+                                            "ordering": true,
+                                            "searching": true
+                                        });
+                                    });
+                                }, 300);
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while adding employee data.'
+                        });
+                        $('#submitBtn').prop('disabled', false);
+                    }
+                });
+            });
+        });
+
+        function resetForm(formId) {
+            document.getElementById(formId).reset(); // Reset the form
+        }
+    </script>
+	
 	<!--app JS-->
 	<script src="assets/js/app.js"></script>
 </body>
