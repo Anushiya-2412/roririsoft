@@ -26,6 +26,7 @@ WHERE employee_tbl.emp_status='Active'";
 		<!--end header -->
 		<!--start page wrapper -->
         <?php include("addEmployee.php");?>
+		<?php include("editEmployee.php");?>
 		<div class="page-wrapper">
 			<div class="page-content">
                 
@@ -80,16 +81,16 @@ WHERE employee_tbl.emp_status='Active'";
                       <td><?php echo $email; ?></td>
                       <td><?php echo $role; ?></td>
                       <td>
-                          <button type="button" class="btn btn-circle btn-warning text-white modalBtn" onclick="goEditEmp(<?php echo $emp_id; ?>);" data-bs-toggle="modal" data-bs-target="#editEmployeeModal"><i class='bi bi-pencil-square'></i></button>
+                          <button type="button" class="btn btn-circle btn-warning text-white modalBtn" onclick="goEditEmp(<?php echo $emp_id; ?>);" data-bs-toggle="modal" data-bs-target="#editEmployeeModal">Edit</i></button>
                           <button class="btn btn-circle btn-success text-white " onclick="goViewEmp(<?php echo $emp_id; ?>);" >View</button>
-                          <button type="button" id="docEmp" class="btn btn-circle btn-primary text-white modalBtn" onclick="goDocEmp(<?php echo $emp_id; ?>);" data-bs-toggle="modal" data-bs-target="#docEmployeeModal"><i class='bi bi-file-earmark-text'></i></button>
-                          <button class="btn btn-circle btn-danger text-white" onclick="goDeleteEmployee(<?php echo $emp_id; ?>);"><i class='bi bi-trash'></i></button>
+                         
+                          <button class="btn btn-circle btn-danger text-white" onclick="goDeleteEmployee(<?php echo $emp_id; ?>);">Delete</button>
                           
                       </td>
                     </tr>
                     <?php } ?>   
 								</tbody>
-								<tfoot>
+								<!-- <tfoot>
 									<tr>
                                     <th>S. No</th>
 										<th>Name</th>
@@ -98,7 +99,7 @@ WHERE employee_tbl.emp_status='Active'";
 										<th>Role</th>
 										<th>Action</th>
 									</tr>
-								</tfoot>
+								</tfoot> -->
 							</table>
 						</div>
 					</div>
@@ -183,10 +184,79 @@ WHERE employee_tbl.emp_status='Active'";
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
         function goViewEmp(id){
-            alert(id);
+            
             location.href = "employeeDetails.php?id="+id;
 
         }
+function goEditEmp(id) 
+  
+  {
+    $.ajax({
+        url: 'action/actEmployee.php',
+        method: 'POST',
+        data: {
+            empId: id
+        },
+        dataType: 'json', // Specify the expected data type as JSON
+        success: function(response) {
+			
+
+          $('#empId').val(response.emp_id);
+          $('#editFname').val(response.first_name);
+          $('#editLname').val(response.last_name);
+          $('#editPhone').val(response.phone);
+          $('#editPemail').val(response.personal_email);
+          $('#editCemail').val(response.company_email);
+          $('#editDob').val(response.dob);
+          $('#editAddress').val(response.address);
+          $('#editjDate').val(response.joining_date);
+          $('#editRole').val(response.role);
+          $('#editms').val(response.married_status);
+		  $('#editGender').val(response.gender);
+		  $('#editPayrole').val(response.pay_role);
+		  $('#editImage').val(response.image);
+   
+        },
+        error: function(xhr, status, error) {
+            // Handle errors here
+            console.error('AJAX request failed:', status, error);
+        }
+    });
+}
+function goDeleteEmployee(id)
+{
+    //alert(id);
+    if(confirm("Are you sure you want to delete Employee?"))
+    {
+      $.ajax({
+        url: 'action/actEmployee.php',
+        method: 'POST',
+        data: {
+          deleteId: id
+        },
+        //dataType: 'json', // Specify the expected data type as JSON
+        success: function(response) {
+          $('#example2').load(location.href + ' #example2 > *', function() {
+                               
+                               $('#example2').DataTable().destroy();
+                               
+                                $('#example2').DataTable({
+                                    "paging": true, // Enable pagination
+                                    "ordering": true, // Enable sorting
+                                    "searching": true // Enable searching
+                                });
+                            });
+         
+
+        },
+        error: function(xhr, status, error) {
+            // Handle errors here
+            console.error('AJAX request failed:', status, error);
+        }
+    });
+    }
+}
+
     </script>
 	<script>
 		$(document).ready(function() {
@@ -241,7 +311,10 @@ WHERE employee_tbl.emp_status='Active'";
                                     });
                                 }, 300);
                             });
+
                         } else {
+						
+
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
@@ -265,7 +338,66 @@ WHERE employee_tbl.emp_status='Active'";
         function resetForm(formId) {
             document.getElementById(formId).reset(); // Reset the form
         }
-    </script>
+</script>
+<script>
+
+//--------------Handles edit employee-----------------------------//
+
+document.addEventListener('DOMContentLoaded', function() {
+    $('#editEmployee').off('submit').on('submit', function(e) {
+        e.preventDefault(); // Prevent the form from submitting normally
+
+        var formData = new FormData(this);
+        $.ajax({
+            url: "action/actEmployee.php",
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: response.message,
+                        timer: 2000
+                    }).then(function() {
+                        $('#editEmployeeModal').modal('hide'); // Close the modal
+                        $('.modal-backdrop').remove(); // Remove the backdrop   
+                        $('#example2').load(location.href + ' #example2 > *', function() {
+                            $('#example2').DataTable().destroy();
+                            $('#example2').DataTable({
+                                "paging": true, // Enable pagination
+                                "ordering": true, // Enable sorting
+                                "searching": true // Enable searching
+                            });
+                        });
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while updating employee data.'
+                });
+                $('#updateBtn').prop('disabled', false);
+            }
+        });
+    });
+});
+
+
+</script>
 	
 	<!--app JS-->
 	<script src="assets/js/app.js"></script>

@@ -97,7 +97,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 								<div class="card">
 									<div class="card-body">
 										<div class="d-flex flex-column align-items-center text-center">
-											<img src="<?php echo $image_path; ?>" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
+											<img src="<?php echo $image_path; ?>" alt="<?php echo $name; ?>" class="rounded-circle p-1 bg-primary" width="110">
 											<div class="mt-3">
 												<h4><?php echo $name; ?></h4>
 												<p class="text-secondary mb-1"><?php echo $role;?></p>
@@ -125,15 +125,15 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 												<h6 class="mb-0">Email</h6>
 											</div>
 											<div class="col-sm-4 text-secondary">
-												<input type="text" class="form-control" value="john@example.com" />
+											<h6 class="mb-0"><?php echo $company_email; ?></h6>
 											</div>
 										</div>
 										<div class="row mb-3">
 											<div class="col-sm-2">
-												<h6 class="mb-0">Phone</h6>
+												<h6 class="mb-0">Personal Email</h6>
 											</div>
 											<div class="col-sm-4 text-secondary">
-												<input type="text" class="form-control" value="(239) 816-9029" />
+											<h6 class="mb-0"><?php echo $personal_email; ?></h6>
 											</div>
 										</div>
 										<div class="row mb-3">
@@ -141,7 +141,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 												<h6 class="mb-0">Mobile</h6>
 											</div>
 											<div class="col-sm-3 text-secondary">
-												<input type="text" class="form-control" value="(320) 380-4539" />
+											<h6 class="mb-0"><?php echo $mobile; ?></h6>
 											</div>
 										</div>
 										<div class="row mb-3">
@@ -149,7 +149,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 												<h6 class="mb-0">Address</h6>
 											</div>
 											<div class="col-sm-3 text-secondary">
-												<input type="text" class="form-control" value="Bay Area, San Francisco, CA" />
+											<h6 class="mb-0"><?php echo $address; ?></h6>
 											</div>
 										</div>
 										
