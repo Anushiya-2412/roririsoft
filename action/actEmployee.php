@@ -115,6 +115,7 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'hdneditEmployee') {
     $editPayrole = $_POST['editPayrole'];
     $editAddress = $_POST['editAddress'];
     $editMs = $_POST['editms'];
+    
 
     $editQuery1 = "UPDATE `employee_tbl` a
                    LEFT JOIN `emp_additional_tbl` b ON a.`emp_id` = b.`emp_id`

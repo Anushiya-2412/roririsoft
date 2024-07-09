@@ -101,7 +101,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 											<div class="mt-3">
 												<h4><?php echo $name; ?></h4>
 												<p class="text-secondary mb-1"><?php echo $role;?></p>
-												<p class="text-muted font-size-sm"><?php echo $address; ?></p>
+												
 												
 											</div>
 										</div>
@@ -117,7 +117,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 												<h6 class="mb-0">Full Name</h6>
 											</div>
 											<div class="col-sm-4 text-secondary">
-												<h6 class="mb-0"><?php echo $name; ?></h6>
+											<p class="text-secondary mb-1"><?php echo $name;?></p>
 											</div>
 										</div>
 										<div class="row mb-3">
@@ -125,7 +125,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 												<h6 class="mb-0">Email</h6>
 											</div>
 											<div class="col-sm-4 text-secondary">
-											<h6 class="mb-0"><?php echo $company_email; ?></h6>
+											<p class="text-secondary mb-1"><?php echo $company_email;?></p>
 											</div>
 										</div>
 										<div class="row mb-3">
@@ -133,23 +133,25 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 												<h6 class="mb-0">Personal Email</h6>
 											</div>
 											<div class="col-sm-4 text-secondary">
-											<h6 class="mb-0"><?php echo $personal_email; ?></h6>
+											<p class="text-secondary mb-1"><?php echo $personal_email;?></p>
 											</div>
 										</div>
 										<div class="row mb-3">
-											<div class="col-sm-3">
+											<div class="col-sm-2">
 												<h6 class="mb-0">Mobile</h6>
 											</div>
 											<div class="col-sm-3 text-secondary">
-											<h6 class="mb-0"><?php echo $mobile; ?></h6>
+											<p class="text-secondary mb-1"><?php echo $mobile;?></p>
+											
 											</div>
 										</div>
 										<div class="row mb-3">
-											<div class="col-sm-3">
+											<div class="col-sm-2">
 												<h6 class="mb-0">Address</h6>
 											</div>
 											<div class="col-sm-3 text-secondary">
-											<h6 class="mb-0"><?php echo $address; ?></h6>
+											<p class="text-secondary mb-1"><?php echo $address;?></p>
+											
 											</div>
 										</div>
 										

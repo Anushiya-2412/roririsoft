@@ -51,9 +51,9 @@ WHERE employee_tbl.emp_status='Active'";
 									<tr>
                                         <th>S. No</th>
 										<th>Name</th>
+                                        <th>Role</th>
 										<th>Mobile</th>
 										<th>Email</th>
-										<th>Role</th>
 										<th>Action</th>
 										
 									</tr>
@@ -77,14 +77,16 @@ WHERE employee_tbl.emp_status='Active'";
                       <tr>
                        <td><?php echo $i; $i++; ?></td>
                       <td><?php echo $name; ?></td>
+                      <td><?php echo $role; ?></td>
                       <td><?php echo $mobile; ?></td>
                       <td><?php echo $email; ?></td>
-                      <td><?php echo $role; ?></td>
+                      
                       <td>
-                          <button type="button" class="btn btn-circle btn-warning text-white modalBtn" onclick="goEditEmp(<?php echo $emp_id; ?>);" data-bs-toggle="modal" data-bs-target="#editEmployeeModal">Edit</i></button>
-                          <button class="btn btn-circle btn-success text-white " onclick="goViewEmp(<?php echo $emp_id; ?>);" >View</button>
+                          <button class="btn btn-sm btn-outline-success" onclick="goViewEmp(<?php echo $emp_id; ?>);" ><i class="lni lni-eye"></i></button>
+                          <button type="button" class="btn btn-sm btn-outline-warning" onclick="goEditEmp(<?php echo $emp_id; ?>);" data-bs-toggle="modal" data-bs-target="#editEmployeeModal"><i class="lni lni-pencil"></i></button>
                          
-                          <button class="btn btn-circle btn-danger text-white" onclick="goDeleteEmployee(<?php echo $emp_id; ?>);">Delete</button>
+                         
+                          <button class="btn btn-sm btn-outline-danger" onclick="goDeleteEmployee(<?php echo $emp_id; ?>);"><i class="lni lni-trash"></i></button>
                           
                       </td>
                     </tr>
