@@ -11,7 +11,7 @@ $response = ['success' => false, 'message' => ''];
 if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addEmployee') {
     
       // Ensure all required fields are filled
-      $requiredFields = ['pname', 'client', 'developers', 'pemail', 'cemail', 'dob', 'address', 'jDate', 'role', 'ms', 'payrole', 'gender'];
+      $requiredFields = ['pname', 'client', 'developers', 'startDate', 'endDate', 'charge'];
       foreach ($requiredFields as $field) {
           if (!isset($_POST[$field]) || empty($_POST[$field])) {
               $response['message'] = "Please fill all required fields.";
