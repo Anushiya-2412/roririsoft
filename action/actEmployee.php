@@ -1,6 +1,8 @@
 <?php
 include("../db/dbConnection.php");
 session_start();
+include('../phpqrcode/qrlib.php'); // Include the QR code library
+
 
 header('Content-Type: application/json');
 
@@ -71,8 +73,13 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addEmployee') {
 
     if ($conn->query($empuser_sql) === TRUE) {
         $last_insert_id = $conn->insert_id;
+        // Generate QR code
+        $qr_content = "Employee ID: $last_insert_id\nName: $name\nRole: $role";
+        $qr_filename = $username . 'qr.png';
+        $qr_file_path = $target_dir . $qr_filename;
+        QRcode::png($qr_content, $qr_file_path);
 
-        $emp_sql = "INSERT INTO employee_tbl (entity_id, emp_first_name, emp_last_name, emp_gender, emp_user_id, emp_married_status, emp_img) VALUES (1, '$fname', '$lname', '$gender', '$last_insert_id', '$married_status', '$image_name')";
+        $emp_sql = "INSERT INTO employee_tbl (entity_id, emp_first_name, emp_last_name, emp_gender, emp_user_id, emp_married_status, emp_img,emp_qr) VALUES (1, '$fname', '$lname', '$gender', '$last_insert_id', '$married_status', '$image_name','$qr_filename')";
 
         if ($conn->query($emp_sql) === TRUE) {
             $last_parent_id = $conn->insert_id;
