@@ -28,7 +28,8 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addEmployee') {
         $image = $_FILES['image'];
         $image_extension = pathinfo($image['name'], PATHINFO_EXTENSION);
         $image_name = $username . '.' . $image_extension;
-        $target_dir = '../image/Employee/';
+        // $target_dir = '../image/Employee/';F:\11
+        $target_dir = $target_dir;
         $target_file = $target_dir . $image_name;
 
         // Create the target directory if it doesn't exist
