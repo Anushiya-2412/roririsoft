@@ -35,27 +35,9 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addEmployee') {
     $payrole = $_POST['payrole'];
     $gender = $_POST['gender'];
     $username = $fname . $lname;
-    $image_name = null;
+    
 
-    // Handle image upload if provided
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $image = $_FILES['image'];
-        $image_extension = pathinfo($image['name'], PATHINFO_EXTENSION);
-        $image_name = $username . '.' . $image_extension;
-        $target_dir = '../image/Employee/';
-        $target_file = $target_dir . $image_name;
-
-        // Create the target directory if it doesn't exist
-        if (!is_dir($target_dir)) {
-            mkdir($target_dir, 0777, true);
-        }
-
-        if (!move_uploaded_file($image['tmp_name'], $target_file)) {
-            $response['message'] = "Error uploading image.";
-            echo json_encode($response);
-            exit;
-        }
-    }
+    
 
     function usernameExists($username) {
         global $conn;
@@ -101,7 +83,7 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addEmployee') {
         //Create an employee Id
         $next_employee_id = generateNextEmployeeId();
 
-        $emp_sql = "INSERT INTO employee_tbl (employee_id,entity_id, emp_first_name, emp_last_name, emp_gender, emp_user_id, emp_married_status, emp_img) VALUES ('$next_employee_id',1, '$fname', '$lname', '$gender', '$last_insert_id', '$married_status', '$image_name')";
+        $emp_sql = "INSERT INTO employee_tbl (employee_id,entity_id, emp_first_name, emp_last_name, emp_gender, emp_user_id, emp_married_status) VALUES ('$next_employee_id',1, '$fname', '$lname', '$gender', '$last_insert_id', '$married_status')";
 
         if ($conn->query($emp_sql) === TRUE) {
             $last_parent_id = $conn->insert_id;
@@ -131,6 +113,45 @@ function generateRandomNumber($username) {
     $num = mt_rand(100, 999);
     return $num;
 }
+
+// Function to fetch emp_user_id from the employee table based on employee ID
+function getEmpUserIdFromEmployee($empId) {
+    global $conn;
+    $query = "SELECT emp_user_id FROM employee_tbl WHERE emp_id = '$empId'";
+    $result = mysqli_query($conn, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        return $row['emp_user_id'];
+    }
+    return null;
+}
+
+// Function to fetch user_id from the admin table based on emp_user_id
+function getUserIdFromAdmin($empUserId) {
+    global $conn;
+    $query = "SELECT username FROM admin_tbl WHERE user_id = '$empUserId'";
+    $result = mysqli_query($conn, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        return $row['username'];
+    }
+    return null;
+}
+
+// Function to get current image filename from employee table
+function getCurrentImageFilename($empId) {
+    global $conn;
+    $query = "SELECT emp_img FROM employee_tbl WHERE emp_id = '$empId'";
+    $result = mysqli_query($conn, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        return $row['emp_img'];
+    }
+    return null;
+}
+
+// Handles the update of the employee
+// Handles the update of the employee
 if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'hdneditEmployee') {
     $empId = $_POST['empId'];
     $editFName = $_POST['editFname'];
@@ -145,27 +166,115 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'hdneditEmployee') {
     $editPayrole = $_POST['editPayrole'];
     $editAddress = $_POST['editAddress'];
     $editMs = $_POST['editms'];
-    
 
-    $editQuery1 = "UPDATE `employee_tbl` a
-                   LEFT JOIN `emp_additional_tbl` b ON a.`emp_id` = b.`emp_id`
-                   SET a.`emp_first_name` = '$editFName',
-                       a.`emp_last_name` = '$editLName',
-                       a.emp_gender = '$editGender',
-                       a.emp_married_status = '$editMs',
-                       b.emp_dob = '$editdob',
-                       b.emp_personal_email = '$editEmail',
-                       b.emp_company_email = '$editCemail',
-                       b.emp_pay_role = '$editPayrole',
-                       b.emp_joining_date = '$editJDate',
-                       b.emp_role = '$editRole',
-                       b.emp_mobile = '$editMobile',
-                       b.emp_address = '$editAddress'
-                   WHERE a.emp_id = '$empId'";
+    // Fetch the emp_user_id from the employee table
+    $empUserId = getEmpUserIdFromEmployee($empId);
 
-    $editRes = mysqli_query($conn, $editQuery1);
+    if (!$empUserId) {
+        $response['success'] = false;
+        $response['message'] = "Error: Employee User ID not found for employee.";
+        echo json_encode($response);
+        exit();
+    }
 
-    $response = [];
+    // Fetch the user ID from the admin table
+    $userId = getUserIdFromAdmin($empUserId);
+
+    if (!$userId) {
+        $response['success'] = false;
+        $response['message'] = "Error: User ID not found in admin table.";
+        echo json_encode($response);
+        exit();
+    }
+
+    // Directory where images are stored
+    $targetDir = "../image/Employee/";
+
+    // Ensure the directory exists; create if not
+    if (!file_exists($targetDir)) {
+        if (!mkdir($targetDir, 0777, true)) {
+            $response['success'] = false;
+            $response['message'] = "Failed to create directory for image upload.";
+            echo json_encode($response);
+            exit();
+        }
+    }
+
+    // Get the current image filename from the database
+    $currentImage = getCurrentImageFilename($empId);
+
+    // Generate new image filename using user ID (assuming it's unique per user)
+    $newImageFilename = $userId . "." . pathinfo($_FILES["editImage"]["name"], PATHINFO_EXTENSION);
+    $targetFilePath = $targetDir . $newImageFilename;
+
+    // Check if the new file exists; if so, replace the existing one
+    if (file_exists($targetFilePath)) {
+        unlink($targetFilePath); // Remove the existing file
+    }
+
+    // Move uploaded file to target directory
+    if (!empty($_FILES["editImage"]["tmp_name"])) {
+        $imageFileType = strtolower(pathinfo($_FILES["editImage"]["name"], PATHINFO_EXTENSION));
+
+        // Check if image file is an actual image or fake image
+        $check = getimagesize($_FILES["editImage"]["tmp_name"]);
+        if ($check === false) {
+            $response['success'] = false;
+            $response['message'] = "Error: File is not an image.";
+            echo json_encode($response);
+            exit();
+        }
+
+        // Check file size (optional, here 5MB max)
+        if ($_FILES["editImage"]["size"] > 5000000) {
+            $response['success'] = false;
+            $response['message'] = "Error: File is too large.";
+            echo json_encode($response);
+            exit();
+        }
+
+        // Allow certain file formats
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+            $response['success'] = false;
+            $response['message'] = "Error: Only JPG, JPEG, PNG files are allowed.";
+            echo json_encode($response);
+            exit();
+        }
+
+        // Move file to target directory
+        if (move_uploaded_file($_FILES["editImage"]["tmp_name"], $targetFilePath)) {
+            $editImage = $newImageFilename; // Set new image filename
+        } else {
+            $response['success'] = false;
+            $response['message'] = "Sorry, there was an error uploading your file.";
+            echo json_encode($response);
+            exit();
+        }
+    }
+
+    // Update employee details in database
+    $editQuery = "UPDATE `employee_tbl` a
+                  LEFT JOIN `emp_additional_tbl` b ON a.`emp_id` = b.`emp_id`
+                  SET a.`emp_first_name` = '$editFName',
+                      a.`emp_last_name` = '$editLName',
+                      a.emp_gender = '$editGender',
+                      a.emp_married_status = '$editMs',
+                      b.emp_dob = '$editdob',
+                      b.emp_personal_email = '$editEmail',
+                      b.emp_company_email = '$editCemail',
+                      b.emp_pay_role = '$editPayrole',
+                      b.emp_joining_date = '$editJDate',
+                      b.emp_role = '$editRole',
+                      b.emp_mobile = '$editMobile',
+                      b.emp_address = '$editAddress'";
+
+    if (isset($editImage)) {
+        $editQuery .= ", a.emp_img = '$editImage'";
+    }
+
+    $editQuery .= " WHERE a.emp_id = '$empId'";
+
+    $editRes = mysqli_query($conn, $editQuery);
 
     if ($editRes) {
         $_SESSION['message'] = "Employee details updated successfully!";
@@ -173,13 +282,12 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'hdneditEmployee') {
         $response['message'] = "Employee details updated successfully!";
     } else {
         $response['success'] = false;
-        $response['message'] = "Error: " . mysqli_error($conn);
+        $response['message'] = "Error updating database: " . mysqli_error($conn);
     }
 
     echo json_encode($response);
     exit();
 }
-
 //Handles Fetching the employee details for editing 
 if (isset($_POST['empId']) && $_POST['empId'] != '') {
     $empId = $_POST['empId'];
