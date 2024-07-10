@@ -31,10 +31,10 @@ $db = new DBConnection("localhost", "root", "", "db_roriri");
 
 $conn = $db->getConnection();
 //Local 
-$target_dir = 'C:\xampp\htdocs\ERP\RoririSoftware\image\Employee';
+// $target_dir = 'C:\xampp\htdocs\ERP\RoririSoftware\image\Employee';
     
 
 //Live Server
-$target_dir = 'C:\xampp\htdocs\ERP\RoririSoftware\image\Employee';
+// $target_dir = 'C:\xampp\htdocs\ERP\RoririSoftware\image\Employee';
 
 ?>

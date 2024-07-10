@@ -68,14 +68,14 @@
 										<label for="input19" class="form-label">Role <span class="text-danger">*</span></label>
 										<select id="editRole" name="editRole" class="form-select" required="required">
 											<option selected>Choose...</option>
-											<?php $sel_role="SELECT * FROM role_tbl WHERE role_status='Active'";
+											<?php $sel_role="SELECT * FROM position_tbl WHERE position_status='Active'";
                                             $res_role = mysqli_query($conn , $sel_role); 
                                             while($row = mysqli_fetch_array($res_role , MYSQLI_ASSOC)) { 
-                                               $role_id = $row['role_id'];
-                                               $role_name = $row['role_name'];
+                                               $position_id = $row['position_id'];
+                                               $position_name = $row['position_name'];
                                                
                                               
-                                               echo '<option value="' . $role_id . '">' . $role_name . '</option>';
+                                               echo '<option value="' . $position_id . '">' . $position_name . '</option>';
                                             } ?>
 										</select>
 									</div>
@@ -112,7 +112,7 @@
 											<input type="file" class="form-control" id="editImage" name="editImage" accept=".jpg, .jpeg, .png">
 											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-calendar'></i></span>
 										</div>
-                                        
+                                        <img id="emp_image" src="" alt="Employee Image" style="margin-top: 10px; max-width: 100%; height: auto;">
 									</div>
 									<div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

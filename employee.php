@@ -2,9 +2,9 @@
 session_start();
     include("db/dbConnection.php");
     
-   $selQuery = "SELECT employee_tbl.*, emp_additional_tbl.*,role_tbl.* FROM employee_tbl
+   $selQuery = "SELECT employee_tbl.*, emp_additional_tbl.*,position_tbl.* FROM employee_tbl
 LEFT JOIN emp_additional_tbl ON emp_additional_tbl.emp_id = employee_tbl.emp_id 
-LEFT JOIN role_tbl ON role_tbl.role_id=emp_additional_tbl.emp_role 
+LEFT JOIN position_tbl ON position_tbl.position_id=emp_additional_tbl.emp_role 
 WHERE employee_tbl.emp_status='Active'";
     
     $resQuery = mysqli_query($conn , $selQuery); 
@@ -51,6 +51,7 @@ WHERE employee_tbl.emp_status='Active'";
 									<tr>
                                         <th>S. No</th>
 										<th>Name</th>
+                                        <th>ID</th>
                                         <th>Role</th>
 										<th>Mobile</th>
 										<th>Email</th>
@@ -61,12 +62,13 @@ WHERE employee_tbl.emp_status='Active'";
 								<tbody>
                                 <?php $i=1; while($row = mysqli_fetch_array($resQuery , MYSQLI_ASSOC)) { 
                            
-                            $emp_id   = $row['emp_id'];     
+                            $emp_id   = $row['emp_id'];  
+                            $employee_id=$row['employee_id'];   
                             $emp_first_name  = $row['emp_first_name'];  
                             $emp_last_name   = $row['emp_last_name'];  
                             $email          = $row['emp_company_email'];
                             $address        = $row['emp_address'];   
-                            $role        = $row['role_name'];   
+                            $role        = $row['position_name'];   
                             $jDate    = $row['emp_joining_date'];
                             $mobile   =$row['emp_mobile'];
                             $date=date_create($jDate);
@@ -77,6 +79,7 @@ WHERE employee_tbl.emp_status='Active'";
                       <tr>
                        <td><?php echo $i; $i++; ?></td>
                       <td><?php echo $name; ?></td>
+                      <td><?php echo $employee_id; ?></th>
                       <td><?php echo $role; ?></td>
                       <td><?php echo $mobile; ?></td>
                       <td><?php echo $email; ?></td>
@@ -216,7 +219,13 @@ function goEditEmp(id)
           $('#editms').val(response.married_status);
 		  $('#editGender').val(response.gender);
 		  $('#editPayrole').val(response.pay_role);
-		  $('#editImage').val(response.image);
+		  // Display the image if the URL is provided
+          if (response.image) {
+            console.log('Image URL:', response.image); // Debugging line
+                $('#emp_image').attr('src', response.image).show();
+            } else {
+                $('#emp_image').hide();
+            }
    
         },
         error: function(xhr, status, error) {
@@ -258,7 +267,7 @@ function goDeleteEmployee(id)
     });
     }
 }
-
+//Data Table script 
     </script>
 	<script>
 		$(document).ready(function() {
@@ -276,6 +285,8 @@ function goDeleteEmployee(id)
 				.appendTo( '#example2_wrapper .col-md-6:eq(0)' );
 		} );
 </script>
+
+    <!--Handles the Ajax call-->
 <script>
         $(document).ready(function () {
             $('#submitBtn').click(function () {
@@ -335,6 +346,10 @@ function goDeleteEmployee(id)
                     }
                 });
             });
+            // Reset the form when the close button is clicked
+        $('#modalCloseBtn').click(function () {
+            resetForm('addEmployee');
+        });
         });
 
         function resetForm(formId) {

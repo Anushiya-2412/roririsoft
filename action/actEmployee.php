@@ -10,6 +10,17 @@ $response = ['success' => false, 'message' => ''];
 
 // Add Employee
 if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addEmployee') {
+    
+      // Ensure all required fields are filled
+      $requiredFields = ['fname', 'lname', 'phone', 'pemail', 'cemail', 'dob', 'address', 'jDate', 'role', 'ms', 'payrole', 'gender'];
+      foreach ($requiredFields as $field) {
+          if (!isset($_POST[$field]) || empty($_POST[$field])) {
+              $response['message'] = "Please fill all required fields.";
+              echo json_encode($response);
+              exit();
+          }
+      }
+
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
     $name = $fname . ' ' . $lname;
@@ -24,14 +35,14 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addEmployee') {
     $payrole = $_POST['payrole'];
     $gender = $_POST['gender'];
     $username = $fname . $lname;
+    $image_name = null;
 
-    // Handle image upload
+    // Handle image upload if provided
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
         $image = $_FILES['image'];
         $image_extension = pathinfo($image['name'], PATHINFO_EXTENSION);
         $image_name = $username . '.' . $image_extension;
-        // $target_dir = '../image/Employee/';F:\11
-        $target_dir = $target_dir;
+        $target_dir = '../image/Employee/';
         $target_file = $target_dir . $image_name;
 
         // Create the target directory if it doesn't exist
@@ -44,10 +55,6 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addEmployee') {
             echo json_encode($response);
             exit;
         }
-    } else {
-        $response['message'] = "Image is required.";
-        echo json_encode($response);
-        exit;
     }
 
     function usernameExists($username) {
@@ -65,6 +72,19 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addEmployee') {
         }
         return $username;
     }
+    //Create an employee Id 
+    function generateNextEmployeeId() {
+        global $conn;
+        $sql = "SELECT MAX(employee_id) as max_id FROM employee_tbl";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $last_id = $row['max_id'];
+        if ($last_id === null) {
+            return 180001; // Starting ID
+        } else {
+            return $last_id + 1;
+        }
+    }
 
     $username = generateUniqueUsername($username);
     $password = generateRandomNumber($username); // Assuming this function generates a password
@@ -73,13 +93,15 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addEmployee') {
 
     if ($conn->query($empuser_sql) === TRUE) {
         $last_insert_id = $conn->insert_id;
-        // Generate QR code
-        $qr_content = "Employee ID: $last_insert_id\nName: $name\nRole: $role";
-        $qr_filename = $username . 'qr.png';
-        $qr_file_path = $target_dir . $qr_filename;
-        QRcode::png($qr_content, $qr_file_path);
+        // // Generate QR code
+        // $qr_content = "Employee ID: $last_insert_id\nName: $name\nRole: $role";
+        // $qr_filename = $username . 'qr.png';
+        // $qr_file_path = $target_dir . $qr_filename;
+        // QRcode::png($qr_content, $qr_file_path);
+        //Create an employee Id
+        $next_employee_id = generateNextEmployeeId();
 
-        $emp_sql = "INSERT INTO employee_tbl (entity_id, emp_first_name, emp_last_name, emp_gender, emp_user_id, emp_married_status, emp_img,emp_qr) VALUES (1, '$fname', '$lname', '$gender', '$last_insert_id', '$married_status', '$image_name','$qr_filename')";
+        $emp_sql = "INSERT INTO employee_tbl (employee_id,entity_id, emp_first_name, emp_last_name, emp_gender, emp_user_id, emp_married_status, emp_img) VALUES ('$next_employee_id',1, '$fname', '$lname', '$gender', '$last_insert_id', '$married_status', '$image_name')";
 
         if ($conn->query($emp_sql) === TRUE) {
             $last_parent_id = $conn->insert_id;
@@ -172,12 +194,13 @@ if (isset($_POST['empId']) && $_POST['empId'] != '') {
     if ($fetchResult) {
 
         $row = mysqli_fetch_assoc($fetchResult);
-        
+         // Construct the image URL
+        $image_url = '../image/Employee/' . $row['emp_img'];
         $employeeDetails = array(
             'emp_id' => $row['emp_id'],
             'first_name' => $row['emp_first_name'],
             'last_name' => $row['emp_last_name'],
-            'image' => $row['emp_img'],
+            'image' => $image_url,
             'dob' => $row['emp_dob'],
             'address' => $row['emp_address'],
             'personal_email' => $row['emp_personal_email'],

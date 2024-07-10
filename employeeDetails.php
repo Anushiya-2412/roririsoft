@@ -17,6 +17,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
             // Fetch employee details
             $row = mysqli_fetch_array($result1 , MYSQLI_ASSOC);
             $id = $row['emp_id']; 
+			$employee_id=$row['employee_id'];
             $e_id = $row['entity_id'];
             $fname = $row['emp_first_name'];
             $lname=$row['emp_last_name'];
@@ -100,6 +101,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 											<img src="<?php echo $image_path; ?>" alt="<?php echo $name; ?>" class="rounded-circle p-1 bg-primary" width="110">
 											<div class="mt-3">
 												<h4><?php echo $name; ?></h4>
+												<p class="text-secondary mb-1"><?php echo $employee_id;?></p>
 												<p class="text-secondary mb-1"><?php echo $role;?></p>
 												
 												
