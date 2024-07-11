@@ -26,7 +26,7 @@ $resQuery = mysqli_query($conn , $selQuery);
         <!--end header -->
         <!--start page wrapper -->
         <?php include("addProject.php");?>
-        <?php include("editProject.php");?>
+        
         <div class="page-wrapper">
             <div class="page-content">
                 <div class="page-title-box">
@@ -312,24 +312,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 url: 'action/actProject.php',
                 method: 'POST',
                 data: {
-                    empId: id
+                    editPro: id
                 },
                 dataType: 'json',
                 success: function(response) {
-                    $('#empId').val(response.emp_id);
-                    $('#editFname').val(response.first_name);
-                    $('#editLname').val(response.last_name);
-                    $('#editPhone').val(response.phone);
-                    $('#editPemail').val(response.personal_email);
-                    $('#editCemail').val(response.company_email);
-                    $('#editDob').val(response.dob);
-                    $('#editAddress').val(response.address);
-                    $('#editjDate').val(response.joining_date);
-                    $('#editRole').val(response.role);
-                    $('#editms').val(response.married_status);
-                    $('#editGender').val(response.gender);
-                    $('#editPayrole').val(response.pay_role);
-                    $('#editImage').val(response.image);
+                
+                    $('#editPro').val(response.pro_id);
+                    $('#pnameE').val(response.project_name);
+                    $('#descriptionE').val(response.description);
+                    $('#multiple-select-clear-field').val(response.programming);
+                    $('#multiple-select-custom-field').val(response.developers);
+                    $('#iniPayE').val(response.iniPay);
+                    $('#proStatusE').val(response.pro_status);
+                    $('#chargeE').val(response.charge);
+                    $('#startDateE').val(response.startDate);
+                    $('#clientNameE').val(response.client);
+                    $('#durationE').val(response.duration);
+                   // Handle programming array
+            const programmingArray = JSON.parse(response.programming);
+            $('#multiple-select-clear-field').val(programmingArray).trigger('change'); // Use trigger to update select field
+
+            // Handle developers array
+            const developersArray = JSON.parse(response.developers);
+            $('#multiple-select-custom-field').val(developersArray).trigger('change'); // Use trigger to update select field
                 },
                 error: function(xhr, status, error) {
                     console.error('AJAX request failed:', status, error);
