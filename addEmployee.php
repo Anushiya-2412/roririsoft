@@ -105,13 +105,6 @@
 											<option value="Unmarried">Unmarried</option>
 										</select>
 									</div>
-									<div class="col-md-6">
-										<label for="input18" class="form-label">Image <span class="text-danger">*</span></label>
-										<div class="position-relative input-icon">
-											<input type="file" class="form-control" id="image" name="image" accept=".jpg, .jpeg, .png" >
-											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-calendar'></i></span>
-										</div>
-									</div>
 									
 								</form>
 						</div>
