@@ -2,7 +2,11 @@
 session_start();
 include("db/dbConnection.php");
 
-$selQuery = "SELECT * FROM `project_tbl` WHERE status='Active'";
+$selQuery = "SELECT project_tbl.*,
+client_tbl.* FROM project_tbl
+LEFT JOIN client_tbl ON client_tbl.client_id=project_tbl.client
+WHERE project_tbl.status='Active'
+";
 
 $resQuery = mysqli_query($conn , $selQuery); 
 ?>
@@ -55,7 +59,7 @@ $resQuery = mysqli_query($conn , $selQuery);
                                         $project_name = $row['project_name'];  
                                         $programming = $row['programming'];  
                                         $developers = $row['developers'];
-                                        $client = $row['client'];   
+                                        $client = $row['client_name'];   
                                         $startDate = $row['start_date'];
                                         $endDate=$row['end_date'];
                                         $duration=$row['duration'];
@@ -63,6 +67,7 @@ $resQuery = mysqli_query($conn , $selQuery);
                                         $charge=$row['total_pay'];
                                         $pro_status=$row['project_status'];  
                                         $pay_status=$row['pay_status'];
+                                        
                                         $programmingArray = json_decode($programming);
                                         $developerArray=json_decode($developers);
 
@@ -114,7 +119,7 @@ $resQuery = mysqli_query($conn , $selQuery);
                                         <td><?php echo $pro_status; ?></td>
                                         <td>
                                             <button class="btn btn-sm btn-outline-success" onclick="goViewProject(<?php echo $project_id; ?>);"><i class="lni lni-eye"></i></button>
-                                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="goEditProject(<?php echo $project_id; ?>);" data-bs-toggle="modal" data-bs-target="#ProjectModal"><i class="lni lni-pencil"></i></button>
+                                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="goEditProject(<?php echo $project_id; ?>);" data-bs-toggle="modal" data-bs-target="#editProjectModal"><i class="lni lni-pencil"></i></button>
                                             <button class="btn btn-sm btn-outline-danger" onclick="goDeleteProject(<?php echo $project_id; ?>);"><i class="lni lni-trash"></i></button>
                                         </td>
                                     </tr>
@@ -189,7 +194,7 @@ $resQuery = mysqli_query($conn , $selQuery);
                     contentType: false,
                     processData: false,
                     success: function(response) {
-                        alert(response);
+                        
                         if (response.success) {
                             Swal.fire({
                                 icon: 'success',

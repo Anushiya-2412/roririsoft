@@ -53,15 +53,23 @@
 									</div>
 									<div class="col-md-6">
 										<label for="input18" class="form-label">Client Name <span class="text-danger">*</span></label>
-										<div class="position-relative input-icon">
-											<input type="text" class="form-control" id="client" name="client" placeholder="Clinet Name" required>
-											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-user'></i></span>
-										</div>
+										
+											<select class="form-select" name="clientName" id="clientName" required>
+												<option selected>Choose....</option>
+												<?php
+												$selClinet="SELECT * FROM `client_tbl` WHERE client_status='Active'";
+												$res_client=mysqli_query($conn,$selClinet);
+												while($rowClient=mysqli_fetch_array($res_client,MYSQLI_ASSOC)){
+													$client_id=$rowClient['client_id'];
+													$client_name=$rowClient['client_name'];
+													echo '<option value="'.$client_id.'">'.$client_name.'</option>';
+												}
+												
+												?>
+											</select>	
+										
 									</div>
-									<div class="col-md-6">
-										<label for="input18" class="form-label">Client Address <span class="text-danger">*</span></label>
-										<textarea class="form-control" id="clientAddress" name="clientAddress" placeholder="Client Address ..." rows="2" required></textarea>
-									</div>
+									
                                     <div class="col-md-6">
 										<label for="input18" class="form-label">Start Date <span class="text-danger">*</span></label>
 										<div class="position-relative input-icon">
