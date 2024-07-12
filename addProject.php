@@ -139,7 +139,7 @@
 						<div class="card-body p-4">
 								
 								<form class="row g-3" name="frmEditProject" id="editProject" enctype="multipart/form-data">
-								<input type="hidden" name="hdnAction" value="editProject">
+								<input type="hidden" name="EhdnAction" value="editProject">
                                 <input type="hidden" name="editPro" id="editPro" value="">
 									<div class="col-md-6">
 										<label for="input13" class="form-label">Project Name <span class="text-danger">*</span></label>
@@ -155,7 +155,7 @@
 									<div class="col-md-12">
 										<label for="input14" class="form-label">Developers<span class="text-danger">*</span></label>
                                         
-                                            <select class="form-select" name="developers[]" id="multiple-select-custom-field" data-placeholder="Choose anything" multiple required>
+                                            <select class="form-select" name="developersE[]" id="multiple-select-field" data-placeholder="Choose anything" multiple required>
 											<?php $sel_role="SELECT * FROM employee_tbl WHERE emp_status='Active'";
                                             $res_role = mysqli_query($conn , $sel_role); 
                                             while($row = mysqli_fetch_array($res_role , MYSQLI_ASSOC)) { 
@@ -172,7 +172,7 @@
 									
 									<div class="col-md-12">
 										<label for="input19" class="form-label">Programming <span class="text-danger">*</span></label>
-										<select class="form-select" name="programming[]" id="multiple-select-clear-field" data-placeholder="Choose anything" multiple required>
+										<select class="form-select" name="programmingE[]" id="multiple-select-optgroup-field" data-placeholder="Choose anything" multiple required>
                                             <option value="HTML">HTML</option>
                                             <option value="CSS">CSS</option>
                                             <option value="JavaScript">JavaScript</option>
@@ -230,7 +230,7 @@
 									</div>
 									<div class="col-md-6">
 										<label for="input19" class="form-label">Project Status <span class="text-danger">*</span></label>
-										<select id="proStatusE" name="proStatus" class="form-select" required>
+										<select id="proStatusE" name="proStatusE" class="form-select" required>
 											<option selected>Choose...</option>
 											<option value="New">New</option>
                                             <option value="In Progress">In Progress</option>
@@ -242,7 +242,7 @@
 						</div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" id="submitBtn" class="btn btn-primary">Save changes</button>
+                                <button type="button" id="updateBtn" class="btn btn-primary">Save changes</button>
                             </div>
 						
             </div>

@@ -71,25 +71,7 @@ $resQuery = mysqli_query($conn , $selQuery);
                                         $programmingArray = json_decode($programming);
                                         $developerArray=json_decode($developers);
 
-                                        // Decode JSON to get client information
-                                        $clientInfo = json_decode($client);
-
-                                        // Initialize variables to store client name and address
-                                        $clientName = $client; // Default to original value if not JSON or missing 'name'
-                                        $clientAddress = '';   // Initialize address variable
-
-                                        // Check if clientInfo is an object
-                                        if (is_object($clientInfo)) {
-                                            // Iterate through each key-value pair in the JSON object
-                                            foreach ($clientInfo as $key => $value) {
-                                                if ($key === 'name') {
-                                                    $clientName = $value; // Assign client name
-                                                } elseif ($key === 'address') {
-                                                    $clientAddress = $value; // Assign client address
-                                                }
-                                                // You can add more conditions to handle other properties if needed
-                                            }
-                                        }
+                                        
 
                                         // Check if $programmingArray is an array
                                         if (is_array($programmingArray)) {
@@ -114,7 +96,7 @@ $resQuery = mysqli_query($conn , $selQuery);
                                     <tr>
                                         <td><?php echo $i; $i++; ?></td>
                                         <td><?php echo $project_name; ?></td>
-                                        <td><?php echo $clientName; ?></td>
+                                        <td><?php echo $client; ?></td>
                                         <td><?php echo $charge; ?></td>
                                         <td><?php echo $pro_status; ?></td>
                                         <td>
@@ -245,17 +227,19 @@ $resQuery = mysqli_query($conn , $selQuery);
             function resetForm(formId) {
                 document.getElementById(formId).reset(); // Reset the form
             }
+
+            
         });
 
         //--------------Handles edit Project-----------------------------//
 
 document.addEventListener('DOMContentLoaded', function() {
-    $('#editEmployee').off('submit').on('submit', function(e) {
+    $('#editProject').off('submit').on('submit', function(e) {
         e.preventDefault(); // Prevent the form from submitting normally
 
         var formData = new FormData(this);
         $.ajax({
-            url: "action/actEmployee.php",
+            url: "action/actProject.php",
             method: 'POST',
             data: formData,
             contentType: false,
@@ -270,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         text: response.message,
                         timer: 2000
                     }).then(function() {
-                        $('#editEmployeeModal').modal('hide'); // Close the modal
+                        $('#editProjectModal').modal('hide'); // Close the modal
                         $('.modal-backdrop').remove(); // Remove the backdrop   
                         $('#example2').load(location.href + ' #example2 > *', function() {
                             $('#example2').DataTable().destroy();
@@ -294,11 +278,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'An error occurred while updating employee data.'
+                    text: 'An error occurred while updating Project data.'
                 });
                 $('#updateBtn').prop('disabled', false);
             }
         });
+    });
+    $('#updateBtn').on('click', function() {
+        $('#editProject').submit();
     });
 });
 
@@ -330,12 +317,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     $('#durationE').val(response.duration);
                    // Handle programming array
             const programmingArray = JSON.parse(response.programming);
-            $('#multiple-select-clear-field').val(programmingArray).trigger('change'); // Use trigger to update select field
+            $('#multiple-select-optgroup-field').val(programmingArray).trigger('change'); // Use trigger to update select field
 
             // Handle developers array
             const developersArray = JSON.parse(response.developers);
-            $('#multiple-select-custom-field').val(developersArray).trigger('change'); // Use trigger to update select field
-                },
+            $('#multiple-select-field').val(developersArray).trigger('change'); // Use trigger to update select field
+                 },
                 error: function(xhr, status, error) {
                     console.error('AJAX request failed:', status, error);
                 }

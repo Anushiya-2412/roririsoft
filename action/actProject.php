@@ -23,10 +23,10 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addProject') {
       }
     $projectName=$_POST['pname'];
     $projectDescription=$_POST['description'];
-    // $developers = implode(',', $_POST['developers']);
+    
     $developers = $_POST['developers']; 
     $programming = $_POST['programming'];
-    // $programming = implode(',', $_POST['programming']);
+      
     $clientName=$_POST['clientName'];
     
     $startDate=$_POST['startDate'];
@@ -53,9 +53,60 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addProject') {
 echo json_encode($response);
 exit();
 }
-//Handles the delete a project
 
-// Handle deleting a Employee
+//Handles Updating the project
+if (isset($_POST['EhdnAction']) && $_POST['EhdnAction'] == 'editProject') {
+    $editPro=$_POST['editPro'];
+    $eProName=$_POST['pnameE'];
+    $eDescription=$_POST['descriptionE'];
+    $eProgramming=$_POST['programmingE'];
+    $eDevelopers=$_POST['developersE'];
+    $eClient=$_POST['clientNameE'];
+    $eStartDate=$_POST['startDateE'];
+    $eDuration=$_POST['durationE'];
+    $echarge=$_POST['chargeE'];
+    $eIniPay=$_POST['iniPayE'];
+    $eProStatus=$_POST['proStatusE'];
+
+    $eProgrammingJson = json_encode($eProgramming);
+    $eDevelopersJson = json_encode($eDevelopers);
+
+        // Update Project details in database
+        $editQuery = "UPDATE `project_tbl`
+        SET 
+        `project_name`='$eProName',
+        `programming`='$eProgrammingJson',
+        `developers`='$eDevelopersJson',
+        `client`='$eClient',
+        `start_date`='$eStartDate',
+        `duration`='$eDuration',
+        `inital_pay`='$eIniPay',
+        `total_pay`='$echarge',
+        `description`='$eDescription',
+        -- `pay_status`='',
+        `project_status`='$eProStatus'
+        WHERE `project_id`='$editPro'";
+
+                
+                $editRes = mysqli_query($conn, $editQuery);
+
+            if ($editRes) {
+                $_SESSION['message'] = "Project details updated successfully!";
+                $response['success'] = true;
+                $response['message'] = "Project details updated successfully!";
+            } else {
+                $response['success'] = false;
+                $response['message'] = "Error updating database: " . mysqli_error($conn);
+            }
+
+            echo json_encode($response);
+            exit();
+}
+
+
+//Handles deleting a project
+
+
 if (isset($_POST['deleteId'])) {
     $id = $_POST['deleteId'];
     $queryDel = "UPDATE `project_tbl` SET status='Inactive'
