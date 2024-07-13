@@ -83,12 +83,12 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addEmployee') {
         //Create an employee Id
         $next_employee_id = generateNextEmployeeId();
 
-        $emp_sql = "INSERT INTO employee_tbl (employee_id,entity_id, emp_first_name, emp_last_name, emp_gender, emp_user_id, emp_married_status) VALUES ('$next_employee_id',1, '$fname', '$lname', '$gender', '$last_insert_id', '$married_status')";
+        $emp_sql = "INSERT INTO employee_tbl (employee_id,entity_id, emp_first_name, emp_last_name, emp_gender, emp_user_id,emp_role, emp_married_status) VALUES ('$next_employee_id',1, '$fname', '$lname', '$gender', '$last_insert_id', '$role', '$married_status')";
 
         if ($conn->query($emp_sql) === TRUE) {
             $last_parent_id = $conn->insert_id;
 
-            $emp_add_sql = "INSERT INTO emp_additional_tbl (emp_id, emp_personal_email, emp_company_email, emp_dob, emp_pay_role, emp_joining_date, emp_role, emp_mobile, emp_address) VALUES ('$last_parent_id', '$pemail', '$cemail', '$dob', '$payrole', '$jDate', '$role', '$mobile', '$address')";
+            $emp_add_sql = "INSERT INTO emp_additional_tbl (emp_id, emp_personal_email, emp_company_email, emp_dob, emp_pay_role, emp_joining_date,  emp_mobile, emp_address) VALUES ('$last_parent_id', '$pemail', '$cemail', '$dob', '$payrole', '$jDate', '$mobile', '$address')";
 
             if ($conn->query($emp_add_sql) === TRUE) {
                 $response['success'] = true;
@@ -259,12 +259,12 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'hdneditEmployee') {
                       a.`emp_last_name` = '$editLName',
                       a.emp_gender = '$editGender',
                       a.emp_married_status = '$editMs',
+                      a.emp_role = '$editRole',
                       b.emp_dob = '$editdob',
                       b.emp_personal_email = '$editEmail',
                       b.emp_company_email = '$editCemail',
                       b.emp_pay_role = '$editPayrole',
                       b.emp_joining_date = '$editJDate',
-                      b.emp_role = '$editRole',
                       b.emp_mobile = '$editMobile',
                       b.emp_address = '$editAddress'";
 

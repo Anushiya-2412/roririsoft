@@ -162,3 +162,47 @@ if (isset($_POST['editPro']) && $_POST['editPro'] != '') {
     exit();
 }
 
+//Handles the add Payment 
+
+if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addPayment') {
+
+    // Ensure all required fields are filled
+    $requiredFields = ['proName', 'overAmnt', 'amntReceived', 'balance', 'date','payMode','payStatus','received'];
+    foreach ($requiredFields as $field) {
+        if (!isset($_POST[$field]) || empty($_POST[$field])) {
+            $response['message'] = "Please fill all required fields.";
+            echo json_encode($response);
+            exit();
+        }
+    }
+
+    
+}
+
+//Handles Fetching the payment details for viewing 
+if (isset($_POST['proId']) && $_POST['proId'] != '') {
+    $proId = $_POST['proId'];
+
+    $projectName="SELECT * FROM project_tbl WHERE project_id='$proId' AND status='Active'";
+    $fetchRes = mysqli_query($conn, $projectName);
+    
+    if ($fetchRes) {
+
+        $row = mysqli_fetch_assoc($fetchRes);
+        
+        $projectDetails = array(
+            'pro_id' => $row['project_id'],
+            'project_name' => $row['project_name'],
+            'iniPay' => $row['inital_pay'],
+            'pro_status' => $row['project_status'],
+            'charge' => $row['total_pay'],
+            
+
+        );
+        echo json_encode($projectDetails);
+    } else {
+        $response['message'] = "Error executing query: " . mysqli_error($conn);
+        echo json_encode($response);
+    }
+    exit();
+}

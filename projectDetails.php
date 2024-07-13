@@ -3,43 +3,65 @@ session_start();
     include("db/dbConnection.php");
     
     if(isset($_GET['id']) && $_GET['id'] != '') {
-        $empId = $_GET['id'];
+        $proId = $_GET['id'];
     
         // Prepare and execute the SQL query
-        $selQuery = "SELECT employee_tbl.*, emp_additional_tbl.*,position_tbl.* FROM employee_tbl
-LEFT JOIN emp_additional_tbl ON emp_additional_tbl.emp_id = employee_tbl.emp_id 
-LEFT JOIN position_tbl ON position_tbl.position_id=employee_tbl.emp_role 
-WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
+        $selQuery = "SELECT project_tbl.*,
+        client_tbl.* 
+        FROM project_tbl
+        LEFT JOIN client_tbl on client_tbl.client_id=project_tbl.client
+        WHERE project_tbl.project_id='$proId'";
         
         $result1 = $conn->query($selQuery);
     
         if($result1) {
             // Fetch employee details
             $row = mysqli_fetch_array($result1 , MYSQLI_ASSOC);
-            $id = $row['emp_id']; 
-			$employee_id=$row['employee_id'];
-            $e_id = $row['entity_id'];
-            $fname = $row['emp_first_name'];
-            $lname=$row['emp_last_name'];
-            $location=$row['emp_address'];
-            $personal_email=$row['emp_personal_email'];
-            $company_email=$row['emp_company_email'];
-            $address=$row['emp_address'];
-            $mobile=$row['emp_mobile'];
-            $role=$row['position_name'];
-            $joining_date=$row['emp_joining_date'];
-            $pay_role=$row['emp_pay_role'];
-			$emp_img = $row['emp_img'];
-            $name=$fname." ".$lname; 
+            $id = $row['project_id']; 
+			$project_name=$row['project_name'];
+            $client_name = $row['client_name'];
+            $programming = $row['programming'];
+            $developers=$row['developers'];
+            $duration=$row['duration'];
+            $description=$row['description'];
+            $email=$row['client_email'];
+            $address=$row['client_location'];
+            $mobile=$row['client_phone'];
+            $start_date=$row['start_date'];
+            $pro_status=$row['project_status'];
+            $charge=$row['total_pay'];
+			$pay_status = $row['pay_status'];
+            $programmingArray = json_decode($programming);
+            $developerArray=json_decode($developers);
+
+            // Check if $programmingArray is an array
+            if (is_array($programmingArray)) {
+                // Output each element separated by commas
+                $pro= implode(', ', $programmingArray);
+            } else {
+                // Handle case where $programming is not a valid JSON array
+                $pro= $programming; // Output as-is (may need additional handling)
+            }  
+            // Check if $developerArray is an array
+            if (is_array($developerArray)) {
+                // Output each element separated by commas
+                $dev= implode(', ', $developerArray);
+            } else {
+                // Handle case where $programming is not a valid JSON array
+                $dev= $developerArray; // Output as-is (may need additional handling)
+            }  
+            $empQuery = "SELECT * FROM employee_tbl WHERE emp_id IN ($dev)";
+            $empResult = $conn->query($empQuery);
+
 			// Construct the image path
-			$image_path = "image/Employee/" . $emp_img;   
+			// $image_path = "image/Employee/" . $emp_img;   
     
         } else {
             echo "Error executing query: " . $conn->error;
         }
     } else {
         // If employee id is not provided, redirect to employees.php
-        header("Location: employee.php");
+        header("Location: project.php");
         exit(); // Ensure script stops executing after redirection
     }
     
@@ -48,7 +70,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 <html lang="en">
 
 <?php include("head.php");?>
-
+<?php include("addProject.php"); ?>
 <body>
 	<!--wrapper-->
 	<div class="wrapper">
@@ -90,19 +112,20 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 				
 				<div class="container">
 					<div class="main-body">
-                    <div class="modal-footer p-2">
-                        <button type="button" class="btn btn-danger" onclick="javascript:location.href='employee.php'"><i class='bx bx-arrow-back'></i></button>
-                    </div>
+                        <div class="modal-footer d-flex justify-content-between p-2">
+                            <button type="button" class="btn btn-danger me-auto" onclick="javascript:location.href='project.php'"><i class='bx bx-arrow-back'></i></button>
+                            <button type="button" id="addProjectBtn" onclick="goShow(<?php echo $proId; ?>);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPaymentModal">Payment</button>
+                            
+                        </div>
 						<div class="row">
 							<div class="col-lg-4">
 								<div class="card">
 									<div class="card-body">
 										<div class="d-flex flex-column align-items-center text-center">
-											<img src="<?php echo $image_path; ?>" alt="<?php echo $name; ?>" class="rounded-circle p-1 bg-primary" width="110">
+											<img src="img\Logo Roriri.png" alt="<?php echo $project_name; ?>" class="rounded-circle p-1" width="110">
 											<div class="mt-3">
-												<h4><?php echo $name; ?></h4>
-												<p class="text-secondary mb-1"><?php echo $employee_id;?></p>
-												<p class="text-secondary mb-1"><?php echo $role;?></p>
+												<h4><?php echo $project_name; ?></h4>
+												<p class="text-secondary mb-1"><?php echo $description;?></p>
 												
 												
 											</div>
@@ -116,10 +139,10 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 									<div class="card-body">
 										<div class="row mb-3">
 											<div class="col-sm-2">
-												<h6 class="mb-0">Full Name</h6>
+												<h6 class="mb-0">Client Name</h6>
 											</div>
 											<div class="col-sm-4 text-secondary">
-											<p class="text-secondary mb-1"><?php echo $name;?></p>
+											<p class="text-secondary mb-1"><?php echo $client_name;?></p>
 											</div>
 										</div>
 										<div class="row mb-3">
@@ -127,23 +150,36 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 												<h6 class="mb-0">Email</h6>
 											</div>
 											<div class="col-sm-4 text-secondary">
-											<p class="text-secondary mb-1"><?php echo $company_email;?></p>
+											<p class="text-secondary mb-1"><?php echo $email;?></p>
 											</div>
 										</div>
 										<div class="row mb-3">
 											<div class="col-sm-2">
-												<h6 class="mb-0">Personal Email</h6>
+												<h6 class="mb-0">Developers</h6>
 											</div>
 											<div class="col-sm-4 text-secondary">
-											<p class="text-secondary mb-1"><?php echo $personal_email;?></p>
+											<p class="text-secondary mb-1"><?php if ($empResult) {
+                                                    // Fetch associative array of rows
+                                                    while ($row = $empResult->fetch_assoc()) {
+                                                        // Access employee name from each row
+                                                        $fname = $row['emp_first_name'];
+                                                        $lname=$row['emp_last_name'];
+                                                        $empName=$fname.' '.$lname;
+                                                        // Output or process $employeeName as needed
+                                                        echo " $empName <br>";
+                                                    }
+                                                } else {
+                                                    // Handle query error
+                                                    echo "Query error: " . $conn->error;
+                                                }?></p>
 											</div>
 										</div>
 										<div class="row mb-3">
 											<div class="col-sm-2">
-												<h6 class="mb-0">Mobile</h6>
+												<h6 class="mb-0">Programming</h6>
 											</div>
 											<div class="col-sm-3 text-secondary">
-											<p class="text-secondary mb-1"><?php echo $mobile;?></p>
+											<p class="text-secondary mb-1"><?php echo $pro;?></p>
 											
 											</div>
 										</div>
@@ -163,7 +199,49 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 							</div>
 						</div>
 					</div>
-				</div>
+				</div>  <!--End Container-->
+                <div class="container">
+                    <div class="main-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                    <div class="table-responsive">
+							<table id="example2" class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>Project</th>
+										<th>Position</th>
+										<th>Office</th>
+										<th>Age</th>
+										<th>Start date</th>
+										<th>Salary</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Tiger Nixon</td>
+										<td>System Architect</td>
+										<td>Edinburgh</td>
+										<td>61</td>
+										<td>2011/04/25</td>
+										<td>$320,800</td>
+									</tr>
+									
+									
+									
+									
+								</tbody>
+								
+							</table>
+						</div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!--End Container 2-->
 			</div> <!--End page-content-->
 		</div><!--end page-wrapper-->
 			
@@ -244,7 +322,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
     <script>
         function goViewEmp(id){
             alert(id);
-            location.href = "employeeDetails.php?id="+id;
+            location.href = "projectDetails.php?id="+id;
 
         }
     </script>
@@ -263,7 +341,37 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 			table.buttons().container()
 				.appendTo( '#example2_wrapper .col-md-6:eq(0)' );
 		} );
+
+        //Handles fetch the data
+        function goShow(id) 
+  
+  {
+    $.ajax({
+        url: 'action/actProject.php',
+        method: 'POST',
+        data: {
+            proId: id
+        },
+        dataType: 'json', // Specify the expected data type as JSON
+        success: function(response) {
+			
+
+          
+          $('#proName').val(response.project_name);
+          $('#overAmnt').val(response.charge);
+          $('#amntReceived').val(response.iniPay);
+          
+		  
+   
+        },
+        error: function(xhr, status, error) {
+            // Handle errors here
+            console.error('AJAX request failed:', status, error);
+        }
+    });
+}
 	</script>
+    
 	<!--app JS-->
 	<script src="assets/js/app.js"></script>
 </body>

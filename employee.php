@@ -4,7 +4,7 @@ session_start();
     
    $selQuery = "SELECT employee_tbl.*, emp_additional_tbl.*,position_tbl.* FROM employee_tbl
 LEFT JOIN emp_additional_tbl ON emp_additional_tbl.emp_id = employee_tbl.emp_id 
-LEFT JOIN position_tbl ON position_tbl.position_id=emp_additional_tbl.emp_role 
+LEFT JOIN position_tbl ON position_tbl.position_id=employee_tbl.emp_role 
 WHERE employee_tbl.emp_status='Active'";
     
     $resQuery = mysqli_query($conn , $selQuery); 
