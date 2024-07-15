@@ -33,7 +33,7 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addProject') {
  
     $duration=$_POST['duration'];
     $charge=$_POST['charge'];
-    $iniPay=$_POST['iniPay'];
+    
     $proStatus=$_POST['proStatus'];
 
      // Encode the arrays to JSON
@@ -43,7 +43,7 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addProject') {
      // Combine clientName and clientAddress into an associative array
     
  
-   $insQuery="INSERT INTO `project_tbl`(`project_name`, `programming`, `developers`, `client`, `start_date`,  `duration`, `inital_pay`, `total_pay`, `description`,`project_status`) VALUES ('$projectName','$programmingJson','$developersJson','$clientName','$startDate','$duration','$iniPay','$charge',' $projectDescription','$proStatus')";
+   $insQuery="INSERT INTO `project_tbl`(`project_name`, `programming`, `developers`, `client`, `start_date`,  `duration`,  `total_pay`, `description`,`project_status`) VALUES ('$projectName','$programmingJson','$developersJson','$clientName','$startDate','$duration','$charge',' $projectDescription','$proStatus')";
    if ($conn->query($insQuery) === TRUE) {
     $response['success'] = true;
     $response['message'] = "Project details added successfully!";
@@ -65,7 +65,7 @@ if (isset($_POST['EhdnAction']) && $_POST['EhdnAction'] == 'editProject') {
     $eStartDate=$_POST['startDateE'];
     $eDuration=$_POST['durationE'];
     $echarge=$_POST['chargeE'];
-    $eIniPay=$_POST['iniPayE'];
+   
     $eProStatus=$_POST['proStatusE'];
 
     $eProgrammingJson = json_encode($eProgramming);
@@ -80,7 +80,7 @@ if (isset($_POST['EhdnAction']) && $_POST['EhdnAction'] == 'editProject') {
         `client`='$eClient',
         `start_date`='$eStartDate',
         `duration`='$eDuration',
-        `inital_pay`='$eIniPay',
+        
         `total_pay`='$echarge',
         `description`='$eDescription',
         -- `pay_status`='',
@@ -143,7 +143,7 @@ if (isset($_POST['editPro']) && $_POST['editPro'] != '') {
             'description' => $row['description'],
             'programming' => $row['programming'],
             'developers' => $row['developers'],
-            'iniPay' => $row['inital_pay'],
+            
             'pro_status' => $row['project_status'],
             'charge' => $row['total_pay'],
             'startDate' => $row['start_date'],
@@ -162,47 +162,7 @@ if (isset($_POST['editPro']) && $_POST['editPro'] != '') {
     exit();
 }
 
-//Handles the add Payment 
 
-if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'addPayment') {
 
-    // Ensure all required fields are filled
-    $requiredFields = ['proName', 'overAmnt', 'amntReceived', 'balance', 'date','payMode','payStatus','received'];
-    foreach ($requiredFields as $field) {
-        if (!isset($_POST[$field]) || empty($_POST[$field])) {
-            $response['message'] = "Please fill all required fields.";
-            echo json_encode($response);
-            exit();
-        }
-    }
 
-    
-}
 
-//Handles Fetching the payment details for viewing 
-if (isset($_POST['proId']) && $_POST['proId'] != '') {
-    $proId = $_POST['proId'];
-
-    $projectName="SELECT * FROM project_tbl WHERE project_id='$proId' AND status='Active'";
-    $fetchRes = mysqli_query($conn, $projectName);
-    
-    if ($fetchRes) {
-
-        $row = mysqli_fetch_assoc($fetchRes);
-        
-        $projectDetails = array(
-            'pro_id' => $row['project_id'],
-            'project_name' => $row['project_name'],
-            'iniPay' => $row['inital_pay'],
-            'pro_status' => $row['project_status'],
-            'charge' => $row['total_pay'],
-            
-
-        );
-        echo json_encode($projectDetails);
-    } else {
-        $response['message'] = "Error executing query: " . mysqli_error($conn);
-        echo json_encode($response);
-    }
-    exit();
-}

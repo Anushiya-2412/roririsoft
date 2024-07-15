@@ -70,7 +70,7 @@ session_start();
 <html lang="en">
 
 <?php include("head.php");?>
-<?php include("addProject.php"); ?>
+<?php include("addPayment.php"); ?>
 <body>
 	<!--wrapper-->
 	<div class="wrapper">
@@ -114,7 +114,7 @@ session_start();
 					<div class="main-body">
                         <div class="modal-footer d-flex justify-content-between p-2">
                             <button type="button" class="btn btn-danger me-auto" onclick="javascript:location.href='project.php'"><i class='bx bx-arrow-back'></i></button>
-                            <button type="button" id="addProjectBtn" onclick="goShow(<?php echo $proId; ?>);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPaymentModal">Payment</button>
+                            <button type="button" id="addPaymentBtn" onclick="goShow(<?php echo $proId; ?>);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPaymentModal">Payment</button>
                             
                         </div>
 						<div class="row">
@@ -192,7 +192,15 @@ session_start();
 											
 											</div>
 										</div>
-										
+										<div class="row mb-3">
+											<div class="col-sm-2">
+												<h6 class="mb-0">Total Amount</h6>
+											</div>
+											<div class="col-sm-3 text-secondary">
+											<p class="text-secondary mb-1"><?php echo $charge;?></p>
+											
+											</div>
+										</div>
 									</div>
 								</div>
 								
@@ -210,25 +218,42 @@ session_start();
 							<table id="example2" class="table table-striped table-bordered">
 								<thead>
 									<tr>
-										<th>Project</th>
-										<th>Position</th>
-										<th>Office</th>
-										<th>Age</th>
-										<th>Start date</th>
-										<th>Salary</th>
+										<th>S. NO</th>
+										<th>Date</th>
+										<th>Received Amount</th>
+										<th>Received By</th>
+										<th>Payment Mode</th>
+										<th>Action</th>
 									</tr>
 								</thead>
 								<tbody>
+									<?php $selPay="SELECT project_tbl.*, project_amount.*
+													FROM project_amount
+													LEFT JOIN project_tbl ON project_tbl.project_id=project_amount.project_id";
+										$resPay = mysqli_query($conn , $selPay); 
+										$i=1;
+										while($rowPay=mysqli_fetch_array($resPay , MYSQLI_ASSOC)){
+											$pID=$rowPay['pro_amt_id'];
+											$amtReceived=$rowPay['amnt_received'];
+											$date=$rowPay['pay_date'];
+											$pay_mode=$rowPay['pay_mode'];
+											$received=$rowPay['received_by'];
+											$total_pay=$rowPay['total_pay'];
+											
+											
+
+										
+									 ?>
 									<tr>
-										<td>Tiger Nixon</td>
-										<td>System Architect</td>
-										<td>Edinburgh</td>
-										<td>61</td>
-										<td>2011/04/25</td>
-										<td>$320,800</td>
+										<td><?php echo $i; ?></td>
+										<td><?php echo $date; ?></td>
+										<td><?php echo $amtReceived; ?></td>
+										<td><?php echo $received; ?></td>
+										<td><?php echo $pay_mode; ?></td>
+										<td><button type="button" class="btn btn-sm btn-outline-warning" onclick="goEditPayment(<?php echo $pID; ?>);" data-bs-toggle="modal" data-bs-target="#editPaymentModal"><i class="lni lni-pencil"></i></button></td>
 									</tr>
 									
-									
+									<?php } ?>
 									
 									
 								</tbody>
@@ -307,24 +332,21 @@ session_start();
 	<?php include("theme.php");?>
 	<!--end switcher-->
 	<!-- Bootstrap JS -->
-	<!-- Bootstrap JS -->
-	<script src="assets/js/bootstrap.bundle.min.js"></script>
-	<!--plugins-->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
-	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
-	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-	<script src="assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
-	<script src="assets/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
-     <!-- Include Bootstrap JS (with Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <!--plugins-->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
+    <script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="assets/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="assets/plugins/select2/js/select2-custom.js"></script>
+    <!--app JS-->
+    <script src="assets/js/app.js"></script>
     <script>
-        function goViewEmp(id){
-            alert(id);
-            location.href = "projectDetails.php?id="+id;
-
-        }
+        
     </script>
 	<script>
 		$(document).ready(function() {
@@ -343,11 +365,10 @@ session_start();
 		} );
 
         //Handles fetch the data
-        function goShow(id) 
-  
-  {
+	
+		function goShow(id) {
     $.ajax({
-        url: 'action/actProject.php',
+        url: 'action/actPayment.php',
         method: 'POST',
         data: {
             proId: id
@@ -356,7 +377,7 @@ session_start();
         success: function(response) {
 			
 
-          
+          $('#proId').val(response.pro_id);
           $('#proName').val(response.project_name);
           $('#overAmnt').val(response.charge);
           $('#amntReceived').val(response.iniPay);
@@ -370,10 +391,170 @@ session_start();
         }
     });
 }
+
+	function goEditPayment(id){
+		$.ajax({
+                url: 'action/actPayment.php',
+                method: 'POST',
+                data: {
+                    editPayId: id
+                },
+                dataType: 'json',
+                success: function(response) {
+                
+                    $('#editPayId').val(response.pay_amt_id);
+                    $('#proNameE').val(response.pro_name);
+                    $('#overAmntE').val(response.total_pay);
+                    $('#amntReceivedE').val(response.over_pay);
+                    $('#balanceE').val(response.amnt_paid);
+                    $('#dateE').val(response.date);
+                    $('#receivedE').val(response.receivedBy);
+                    $('#payModeE').val(response.payModeE);
+                   
+                   // Handle programming array
+            
+                 },
+                error: function(xhr, status, error) {
+                    console.error('AJAX request failed:', status, error);
+                }
+            });
+	}
 	</script>
     
-	<!--app JS-->
-	<script src="assets/js/app.js"></script>
+	<script>
+$(document).ready(function () {
+	console.log("Document ready"); // Debug message
+    // Handle submit button click
+    $('#submitBtn').click(function () {
+        console.log("Submit button clicked"); // Debug message
+        $('#addPayment').submit();
+    });
+
+    // Handle form submission
+    $('#addPayment').off('submit').on('submit', function(e) {
+        e.preventDefault(); // Prevent the form from submitting normally
+        console.log("Form submitted"); // Debug message
+
+        var formData = new FormData(this);
+        $.ajax({
+            url: "action/actPayment.php",
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                console.log("AJAX success", response); // Debug message
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: response.message,
+                        timer: 2000
+                    }).then(function() {
+                        $('#addPaymentModal').modal('hide'); // Close the modal
+                        $('.modal-backdrop').remove(); // Remove the backdrop
+                        setTimeout(function() {
+                            $('#example2').load(location.href + ' #example2 > *', function() {
+                                $('#example2').DataTable().destroy();
+                                $('#example2').DataTable({
+                                    "paging": true,
+                                    "ordering": true,
+                                    "searching": true
+                                });
+                            });
+                        }, 300);
+                    });
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while adding Payment data.'
+                });
+                $('#submitBtn').prop('disabled', false);
+            }
+        });
+    });
+
+    // Reset the form when the close button is clicked
+    $('#modalCloseBtn').click(function () {
+        resetForm('addPayment');
+    });
+
+    // Function to reset the form
+    function resetForm(formId) {
+        document.getElementById(formId).reset(); // Reset the form
+    }
+});
+
+ //--------------Handles edit Payment-----------------------------//
+
+ document.addEventListener('DOMContentLoaded', function() {
+    $('#editPayment').off('submit').on('submit', function(e) {
+        e.preventDefault(); // Prevent the form from submitting normally
+
+        var formData = new FormData(this);
+        $.ajax({
+            url: "action/actPayment.php",
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: response.message,
+                        timer: 2000
+                    }).then(function() {
+                        $('#editPaymentModal').modal('hide'); // Close the modal
+                        $('.modal-backdrop').remove(); // Remove the backdrop   
+                        $('#example2').load(location.href + ' #example2 > *', function() {
+                            $('#example2').DataTable().destroy();
+                            $('#example2').DataTable({
+                                "paging": true, // Enable pagination
+                                "ordering": true, // Enable sorting
+                                "searching": true // Enable searching
+                            });
+                        });
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while updating Payment data.'
+                });
+                $('#updateBtn').prop('disabled', false);
+            }
+        });
+    });
+    $('#updateBtn').on('click', function() {
+        $('#editPayment').submit();
+    });
+});
+</script>
+	
 </body>
 
 </html>

@@ -220,11 +220,11 @@ function goEditEmp(id)
 		  $('#editGender').val(response.gender);
 		  $('#editPayrole').val(response.pay_role);
 		  // Display the image if the URL is provided
-          if (response.image) {
-            console.log('Image URL:', response.image); // Debugging line
-                $('#emp_image').attr('src', response.image).show();
+          if (response.img) {
+            console.log('Image URL:', response.img); // Debugging line
+                $('#editImage').attr('src', response.img).show();
             } else {
-                $('#emp_image').hide();
+                $('#editImage').hide();
             }
    
         },
@@ -313,6 +313,7 @@ function goDeleteEmployee(id)
                             }).then(function() {
                                 $('#addEmployeeModal').modal('hide'); // Close the modal
                                 $('.modal-backdrop').remove(); // Remove the backdrop
+                                resetForm('addEmployee'); // Reset the form
                                 setTimeout(function() {
                                     $('#example2').load(location.href + ' #example2 > *', function() {
                                         $('#example2').DataTable().destroy();

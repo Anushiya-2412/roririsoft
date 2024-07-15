@@ -63,7 +63,7 @@ $resQuery = mysqli_query($conn , $selQuery);
                                         $startDate = $row['start_date'];
                                         $endDate=$row['end_date'];
                                         $duration=$row['duration'];
-                                        $iniPay=$row['inital_pay'];
+                                        
                                         $charge=$row['total_pay'];
                                         $pro_status=$row['project_status'];  
                                         $pay_status=$row['pay_status'];
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 dataType: 'json',
                 success: function(response) {
-                
+                    console.log(response);
                     $('#editPro').val(response.pro_id);
                     $('#pnameE').val(response.project_name);
                     $('#descriptionE').val(response.description);

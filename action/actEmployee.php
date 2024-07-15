@@ -308,7 +308,6 @@ if (isset($_POST['empId']) && $_POST['empId'] != '') {
             'emp_id' => $row['emp_id'],
             'first_name' => $row['emp_first_name'],
             'last_name' => $row['emp_last_name'],
-            'image' => $image_url,
             'dob' => $row['emp_dob'],
             'address' => $row['emp_address'],
             'personal_email' => $row['emp_personal_email'],
@@ -319,6 +318,7 @@ if (isset($_POST['empId']) && $_POST['empId'] != '') {
             'married_status'=>$row['emp_married_status'],
             'gender'=>$row['emp_gender'],
             'joining_date'=>$row['emp_joining_date'],
+            'img'=>$image_url,
 
 
         );

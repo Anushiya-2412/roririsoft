@@ -112,7 +112,7 @@
 											<input type="file" class="form-control" id="editImage" name="editImage" accept=".jpg, .jpeg, .png">
 											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-calendar'></i></span>
 										</div>
-                                        <img id="emp_image" src="" alt="Employee Image" style="margin-top: 10px; max-width: 100%; height: auto;">
+                                        
 									</div>
 									<div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
