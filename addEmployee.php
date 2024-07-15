@@ -57,7 +57,7 @@
 										</div>
 									</div>
 									<div class="col-md-6">
-										<label for="input17" class="form-label">Compmany Email <span class="text-danger">*</span></label>
+										<label for="input17" class="form-label">Company Email <span class="text-danger">*</span></label>
 										<div class="position-relative input-icon">
 											<input type="email" class="form-control" id="cemail" name="cemail" placeholder="Company Email" required>
 											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-envelope'></i></span>
