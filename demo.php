@@ -1,7 +1,7 @@
 <?php
 session_start();
 include("C:\\xampp\\htdocs\\ERP\\db\\dbConnection.php");
-include("../url.php");
+include("url.php");
 $selQuery = "SELECT project_tbl.*,
 client_tbl.* FROM project_tbl
 LEFT JOIN client_tbl ON client_tbl.client_id=project_tbl.client
@@ -100,9 +100,9 @@ $resQuery = mysqli_query($conn , $selQuery);
                                         <td><?php echo $charge; ?></td>
                                         <td><?php echo $pro_status; ?></td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" data-bs-placement="top" title="View" onclick="goViewProject(<?php echo $project_id; ?>);"><i class="lni lni-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success" onclick="goViewProject(<?php echo $project_id; ?>);"><i class="lni lni-eye"></i></button>
                                             <button type="button" class="btn btn-sm btn-outline-warning" onclick="goEditProject(<?php echo $project_id; ?>);" data-bs-toggle="modal" data-bs-target="#editProjectModal"><i class="lni lni-pencil"></i></button>
-                                            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" onclick="goDeleteProject(<?php echo $project_id; ?>);"><i class="lni lni-trash"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="goDeleteProject(<?php echo $project_id; ?>);"><i class="lni lni-trash"></i></button>
                                         </td>
                                     </tr>
                                     <?php } ?>
@@ -137,16 +137,6 @@ $resQuery = mysqli_query($conn , $selQuery);
     <script src="<?php echo $select2Custom;?>"></script>
     <!--app JS-->
     <script src="<?php echo $app; ?>"></script>
-    <!-- Initialize tooltips -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            })
-        });
-    </script>
-
 
     <script>
 		$(document).ready(function() {

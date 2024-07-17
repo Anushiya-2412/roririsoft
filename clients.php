@@ -1,7 +1,7 @@
 <?php
 session_start();
-    include("db/dbConnection.php");
-    
+include("C:\\xampp\\htdocs\\ERP\\db\\dbConnection.php");
+include("../url.php");    
    $selQuery = "SELECT client_tbl.*, project_tbl.* FROM client_tbl
 LEFT JOIN project_tbl ON client_tbl.client_id=project_tbl.client
 WHERE client_tbl.client_status='Active'";
@@ -85,7 +85,7 @@ WHERE client_tbl.client_status='Active'";
                           <button type="button" class="btn btn-sm btn-outline-warning" onclick="goEditClient(<?php echo $client_id; ?>);" data-bs-toggle="modal" data-bs-target="#editClientModal"><i class="lni lni-pencil"></i></button>
                          
                          
-                          <button class="btn btn-sm btn-outline-danger" onclick="goDeleteClient(<?php echo $client_id; ?>);"><i class="lni lni-trash"></i></button>
+                          <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" onclick="goDeleteClient(<?php echo $client_id; ?>);"><i class="lni lni-trash"></i></button>
                           
                       </td>
                     </tr>
@@ -171,18 +171,28 @@ WHERE client_tbl.client_status='Active'";
 	<!--end switcher-->
 	<!-- Bootstrap JS -->
 	<!-- Bootstrap JS -->
-	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="<?php echo $bootsrapBundle; ?>"></script>
 	<!--plugins-->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
-	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
-	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-	<script src="assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
-	<script src="assets/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
+	<script src="<?php echo $js; ?>"></script>
+	<script src="<?php echo $simplebar;?>"></script>
+	<script src="<?php echo $mentimenu; ?>"></script>
+	<script src="<?php echo $perfectScrolbar;  ?>"></script>
+	<script src="<?php echo $datatableMin; ?>"></script>
+	<script src="<?php echo $datatbaleBootstrap;?>"></script>
      <!-- Include Bootstrap JS (with Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="<?php echo $popper;?>"></script>
+    <script src="<?php echo $bootStackPath;?>"></script>
+	<script src="<?php echo $sweetalert; ?>"></script>
+
+     <!-- Initialize tooltips -->
+     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
+    </script>
     <script>
         function goViewClient(id){
             
@@ -325,7 +335,7 @@ function goDeleteClient(id)
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'An error occurred while adding employee data.'
+                            text: 'An error occurred while adding Clients data.'
                         });
                         $('#submitBtn').prop('disabled', false);
                     }
@@ -405,7 +415,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 	
 	<!--app JS-->
-	<script src="assets/js/app.js"></script>
+	<script src="<?php echo $app; ?>"></script>
 </body>
 
 </html>

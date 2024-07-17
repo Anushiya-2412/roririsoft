@@ -1,21 +1,21 @@
 <!-- Modal -->
 
-<div class="modal fade" id="addClientModal" tabindex="-1" aria-labelledby="addClientModalLabel" aria-hidden="true">
+<div class="modal fade" id="addEnquireModal" tabindex="-1" aria-labelledby="addEnquireModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="clientModalLabel">Add New Client</h5>
+						<h5 class="modal-title" id="enquireModalLabel">Add New Enquire</h5>
 						<button type="button" class="btn-close" id="modalCloseBtn" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 				
 						<div class="card-body p-4">
 								
-								<form class="row g-3" name="frmAddClient" id="addClient" enctype="multipart/form-data">
-								<input type="hidden" name="hdnAction" value="addClient">
+								<form class="row g-3" name="frmAddEnquire" id="addEnquire" enctype="multipart/form-data">
+								<input type="hidden" name="hdnAction" value="addEnquire">
 									<div class="col-md-6">
-										<label for="input13" class="form-label">Client Name <span class="text-danger">*</span></label>
+										<label for="input13" class="form-label">Name <span class="text-danger">*</span></label>
 										<div class="position-relative input-icon">
-											<input type="text" class="form-control" name="Cname" id="Cname" placeholder="Client Name" required>
+											<input type="text" class="form-control" name="name" id="name" placeholder="Name" required>
                                            
 											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-user'></i></span>
 										</div>
@@ -30,7 +30,7 @@
 									<div class="col-md-6">
 										<label for="input18" class="form-label">Email <span class="text-danger">*</span></label>
 										<div class="position-relative input-icon">
-											<input type="email" class="form-control" id="cEmail" name="cEmail" placeholder="Email" required>
+											<input type="email" class="form-control" id="eEmail" name="eEmail" placeholder="Email" required>
 											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-calendar'></i></span>
 										</div>
 									</div>
@@ -38,22 +38,21 @@
 									<div class="col-md-6">
 										<label for="input15" class="form-label">Phone <span class="text-danger">*</span></label>
 										<div class="position-relative input-icon">
-											<input type="text" class="form-control" name="cPhone" id="cPhone" placeholder="Phone" required>
+											<input type="text" class="form-control" name="ePhone" id="ePhone" placeholder="Phone" required>
 											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-microphone'></i></span>
 										</div>
 									</div>
-									<div class="col-md-6">
-										<label for="input16" class="form-label">GST <span class="text-danger">*</span></label>
-										<div class="position-relative input-icon">
-											<input type="text" class="form-control" id="gst" name="gst" placeholder="GST" required>
-											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-envelope'></i></span>
-										</div>
-									</div>
+									
                                     <div class="col-md-6">
 										<label for="input23" class="form-label">Address <span class="text-danger">*</span></label>
-										<textarea class="form-control" id="cAddress" name="cAddress" placeholder="Address ..." rows="3" required></textarea>
+										<textarea class="form-control" id="eAddress" name="eAddress" placeholder="Address ..." rows="3" required></textarea>
 									</div>
-									
+									<div class="col-md-6">
+										<label for="input16" class="form-label">Enquire Details <span class="text-danger">*</span></label>
+										<div class="position-relative input-icon">
+                                        <textarea class="form-control" id="details" name="details" placeholder="Enquire Details ..." rows="3" required></textarea>
+										</div>
+									</div>
 									
 								</form>
 						</div>
@@ -70,7 +69,7 @@
 <script>
 document.getElementById('submitBtn').addEventListener('click', function(event) {
     // Validate the form fields
-    var form = document.getElementById('addClient');
+    var form = document.getElementById('addEnquire');
     var isValid = true;
 
     // Check each required field
@@ -97,23 +96,23 @@ document.getElementById('submitBtn').addEventListener('click', function(event) {
 
 <!-- Modal -->
 
-<div class="modal fade" id="editClientModal" tabindex="-1" aria-labelledby="editClientModalLabel" aria-hidden="true">
+<div class="modal fade" id="editEnquireModal" tabindex="-1" aria-labelledby="editEnquireModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="clientModalLabel">Edit Client</h5>
+						<h5 class="modal-title" id="enquireModalLabel">Edit Enquire</h5>
 						<button type="button" class="btn-close" id="modalCloseBtn" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 				
 						<div class="card-body p-4">
 								
-								<form class="row g-3" name="frmAddClient" id="editClient" enctype="multipart/form-data">
-								<input type="hidden" name="hdnAction" value="editClient">
-                                <input type="hidden" name="editIdClient" id="editIdClient" value="">
+								<form class="row g-3" name="frmEditEnquire" id="editEnquire" enctype="multipart/form-data">
+								<input type="hidden" name="hdnAction" value="editEnquire">
+                                <input type="hidden" name="editIdEnquire" id="editIdEnquire" value="">
 									<div class="col-md-6">
 										<label for="input13" class="form-label">Client Name <span class="text-danger">*</span></label>
 										<div class="position-relative input-icon">
-											<input type="text" class="form-control" name="CnameE" id="CnameE" placeholder="Client Name" required>
+											<input type="text" class="form-control" name="EnameE" id="EnameE" placeholder="Client Name" required>
                                            
 											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-user'></i></span>
 										</div>
@@ -128,7 +127,7 @@ document.getElementById('submitBtn').addEventListener('click', function(event) {
 									<div class="col-md-6">
 										<label for="input18" class="form-label">Email <span class="text-danger">*</span></label>
 										<div class="position-relative input-icon">
-											<input type="email" class="form-control" id="cEmailE" name="cEmailE" placeholder="Email" required>
+											<input type="email" class="form-control" id="EmailE" name="EmailE" placeholder="Email" required>
 											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-calendar'></i></span>
 										</div>
 									</div>
@@ -136,20 +135,20 @@ document.getElementById('submitBtn').addEventListener('click', function(event) {
 									<div class="col-md-6">
 										<label for="input15" class="form-label">Phone <span class="text-danger">*</span></label>
 										<div class="position-relative input-icon">
-											<input type="text" class="form-control" name="cPhoneE" id="cPhoneE" placeholder="Phone" required>
+											<input type="text" class="form-control" name="PhoneE" id="PhoneE" placeholder="Phone" required>
 											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-microphone'></i></span>
 										</div>
 									</div>
-									<div class="col-md-6">
-										<label for="input16" class="form-label">GST <span class="text-danger">*</span></label>
-										<div class="position-relative input-icon">
-											<input type="text" class="form-control" id="gstE" name="gstE" placeholder="GST" required>
-											<span class="position-absolute top-50 translate-middle-y"><i class='bx bx-envelope'></i></span>
-										</div>
-									</div>
+							
                                     <div class="col-md-6">
 										<label for="input23" class="form-label">Address <span class="text-danger">*</span></label>
-										<textarea class="form-control" id="cAddressE" name="cAddressE" placeholder="Address ..." rows="3" required></textarea>
+										<textarea class="form-control" id="AddressE" name="AddressE" placeholder="Address ..." rows="3" required></textarea>
+									</div>
+                                    <div class="col-md-6">
+										<label for="input16" class="form-label">Enquire Details <span class="text-danger">*</span></label>
+										<div class="position-relative input-icon">
+                                        <textarea class="form-control" id="detailsE" name="detailsE" placeholder="Enquire Details ..." rows="3" required></textarea>
+										</div>
 									</div>
 									
 									

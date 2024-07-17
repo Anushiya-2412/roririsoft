@@ -1,3 +1,4 @@
+
 <header>
 			<div class="topbar d-flex align-items-center">
 				<nav class="navbar navbar-expand gap-3">
@@ -20,7 +21,7 @@
 								</a>
 							</li>
 
-							<li class="nav-item dropdown dropdown-app">
+							<li class="nav-item dropdown dropdown-app" style="display:none">
 								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-toggle="dropdown" href="javascript:;"><i class='bx bx-grid-alt'></i></a>
 								<div class="dropdown-menu dropdown-menu-end p-0">
 									<div class="app-container p-2 my-2">
@@ -248,7 +249,7 @@
 								</div>
 							</li>
 
-							<li class="nav-item dropdown dropdown-large">
+							<li class="nav-item dropdown dropdown-large" style="display:none">
 								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" data-bs-toggle="dropdown"><span class="alert-count">7</span>
 									<i class='bx bx-bell'></i>
 								</a>
@@ -373,7 +374,7 @@
 									</a>
 								</div>
 							</li>
-							<li class="nav-item dropdown dropdown-large">
+							<li class="nav-item dropdown dropdown-large" style="display:none">
 								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">8</span>
 									<i class='bx bx-shopping-bag'></i>
 								</a>
@@ -565,8 +566,8 @@
 						<a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							<img src="assets/images/avatars/avatar-2.png" class="user-img" alt="user avatar">
 							<div class="user-info">
-								<p class="user-name mb-0">Pauline Seitz</p>
-								<p class="designattion mb-0">Web Designer</p>
+								<p class="user-name mb-0"><?php echo htmlspecialchars($user); ?>!</p>
+								<p class="designattion mb-0"><?php echo htmlspecialchars($rol); ?></p>
 							</div>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end">

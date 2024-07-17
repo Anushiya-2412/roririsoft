@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db/dbConnection.php");
+include("C:\\xampp\\htdocs\\ERP\\db\\dbConnection.php");
 
 if (isset($_REQUEST['logout'])) {
     session_destroy();

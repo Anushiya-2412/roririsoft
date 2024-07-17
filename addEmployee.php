@@ -118,28 +118,58 @@
 				
 	    </div> <!--end modal dialog-->
 </div><!--end Modal Fade-->
-<script>
-document.getElementById('submitBtn').addEventListener('click', function(event) {
-    // Validate the form fields
-    var form = document.getElementById('addEmployee');
-    var isValid = true;
-
-    // Check each required field
-    var inputs = form.querySelectorAll('[required]');
-    inputs.forEach(function(input) {
-        if (input.value.trim() === '') {
-            isValid = false;
-            input.classList.add('is-invalid'); // Optional: Add invalid class for styling
-        }
-    });
-
-    // If any required field is empty, prevent form submission
-    if (!isValid) {
-        event.preventDefault(); // Prevent form submission
-        event.stopPropagation(); // Prevent event bubbling
-    } else {
-        // If all required fields are filled, submit the form (if desired)
-        // form.submit(); // Uncomment this line to submit the form programmatically
+    <!-- Custom JavaScript for form validation and formatting -->
+    <script>
+    // Function to capitalize first letter of each word
+    function capitalizeFirstLetters(str) {
+        return str.replace(/\b\w/g, function (char) {
+            return char.toUpperCase();
+        });
     }
-});
+
+    // Validate and format form before submission
+    function validateForm() {
+        // Get form inputs
+        var fname = document.getElementById('fname').value.trim();
+        var lname = document.getElementById('lname').value.trim();
+        var phone = document.getElementById('phone').value.trim();
+        var pemail = document.getElementById('pemail').value.trim().toLowerCase(); // Convert to lowercase
+        var cemail = document.getElementById('cemail').value.trim().toLowerCase(); // Convert to lowercase
+        var payrole = document.getElementById('payrole').value.trim();
+        var address = document.getElementById('address').value.trim();
+
+        // Capitalize first letter of each word for name fields
+        document.getElementById('fname').value = capitalizeFirstLetters(fname);
+        document.getElementById('lname').value = capitalizeFirstLetters(lname);
+
+        // Validate phone number
+        var phonePattern = /^\d{10}$/;
+        if (!phonePattern.test(phone)) {
+            alert('Phone number must be exactly 10 digits.');
+            return false;
+        }
+
+        // Validate pay role format (e.g., 10,000)
+        var payrolePattern = /^\d{1,3}(,\d{3})*$/;
+        if (!payrolePattern.test(payrole)) {
+            alert('Pay role must be in format like 10,000.');
+            return false;
+        }
+
+        // Validate email format
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(pemail)) {
+            alert('Please enter a valid Personal Email address.');
+            return false;
+        }
+        if (!emailPattern.test(cemail)) {
+            alert('Please enter a valid Company Email address.');
+            return false;
+        }
+
+        // Form is valid, allow submission
+        return true;
+    }
 </script>
+
+   

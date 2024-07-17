@@ -1,5 +1,5 @@
 <?php
-include("../db/dbConnection.php");
+include("C:\\xampp\\htdocs\\ERP\\db\\dbConnection.php");
 session_start();
 
 

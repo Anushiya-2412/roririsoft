@@ -1,8 +1,8 @@
 <?php
-include("../db/dbConnection.php");
+include("C:\\xampp\\htdocs\\ERP\\db\\dbConnection.php");
 session_start();
-include('../phpqrcode/qrlib.php'); // Include the QR code library
-
+include('../../phpqrcode/qrlib.php'); // Include the QR code library
+include("../../url.php");  
 
 header('Content-Type: application/json');
 
@@ -188,7 +188,7 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'hdneditEmployee') {
     }
 
     // Directory where images are stored
-    $targetDir = "../image/Employee/";
+    $targetDir = $image;
 
     // Ensure the directory exists; create if not
     if (!file_exists($targetDir)) {
@@ -226,7 +226,7 @@ if (isset($_POST['hdnAction']) && $_POST['hdnAction'] == 'hdneditEmployee') {
         }
 
         // Check file size (optional, here 5MB max)
-        if ($_FILES["editImage"]["size"] > 5000000) {
+        if ($_FILES["editImage"]["size"] > 10000000) {
             $response['success'] = false;
             $response['message'] = "Error: File is too large.";
             echo json_encode($response);

@@ -1,13 +1,8 @@
 <?php
 session_start();
 include("C:\\xampp\\htdocs\\ERP\\db\\dbConnection.php");
-include("../url.php");
-
-    
-   $selQuery = "SELECT employee_tbl.*, emp_additional_tbl.*,position_tbl.* FROM employee_tbl
-LEFT JOIN emp_additional_tbl ON emp_additional_tbl.emp_id = employee_tbl.emp_id 
-LEFT JOIN position_tbl ON position_tbl.position_id=employee_tbl.emp_role 
-WHERE employee_tbl.emp_status='Active'";
+include("../url.php");    
+   $selQuery = "SELECT * FROM `enquire_tbl` WHERE enquire_status='Active'";
     
     $resQuery = mysqli_query($conn , $selQuery); 
     
@@ -27,8 +22,8 @@ WHERE employee_tbl.emp_status='Active'";
 			<?php include("top.php");?>
 		<!--end header -->
 		<!--start page wrapper -->
-        <?php include("addEmployee.php");?>
-		<?php include("editEmployee.php");?>
+        <?php include("addEnquire.php");?>
+		
 		<div class="page-wrapper">
 			<div class="page-content">
                 
@@ -36,9 +31,9 @@ WHERE employee_tbl.emp_status='Active'";
             <div class="page-title-box">
                 
                 <div class="page-title-right">
-                    <h4 class="page-title">Employee</h4>
+                    <h4 class="page-title">Enquire</h4>
                     <div class="position-relative" style="height: 80px;"> <!-- Adjust height as needed -->
-                    <button type="button" id="addEmpBtn" class="btn btn-primary position-absolute top-0 end-0" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Add New Employee</button>
+                    <button type="button" id="addEnquireBtn" class="btn btn-primary position-absolute top-0 end-0" data-bs-toggle="modal" data-bs-target="#addEnquireModal">Add New Enquire</button>
                     </div>
 
                 </div>
@@ -53,10 +48,10 @@ WHERE employee_tbl.emp_status='Active'";
 									<tr>
                                         <th>S. No</th>
 										<th>Name</th>
-                                        <th>ID</th>
-                                        <th>Position</th>
-										<th>Mobile</th>
-										<th>Email</th>
+                                        <th>Company</th>
+                                        <th>Enquire</th>
+                                        <th>Phone</th>
+										<th>Address</th>
 										<th>Action</th>
 										
 									</tr>
@@ -64,34 +59,31 @@ WHERE employee_tbl.emp_status='Active'";
 								<tbody>
                                 <?php $i=1; while($row = mysqli_fetch_array($resQuery , MYSQLI_ASSOC)) { 
                            
-                            $emp_id   = $row['emp_id'];  
-                            $employee_id=$row['employee_id'];   
-                            $emp_first_name  = $row['emp_first_name'];  
-                            $emp_last_name   = $row['emp_last_name'];  
-                            $email          = $row['emp_company_email'];
-                            $address        = $row['emp_address'];   
-                            $role        = $row['position_name'];   
-                            $jDate    = $row['emp_joining_date'];
-                            $mobile   =$row['emp_mobile'];
-                            $date=date_create($jDate);
-                            $name=$emp_first_name.' '.$emp_last_name;
+                                        $enquire_id  = $row['enquire_id'];  
+                                        $name=$row['e_name'];   
+                                        $enquire_details  = $row['enquire_details'];  
+                                        $email   = $row['e_email'];  
+                                        $phone          = $row['e_mobile'];
+                                        $address        = $row['e_address'];   
+                                       
+                                        $compName=$row['e_company_name'];
 
-                      date_format($date,"Y/m/d H:i:s");
+                                
                       ?>
                       <tr>
                        <td><?php echo $i; $i++; ?></td>
                       <td><?php echo $name; ?></td>
-                      <td><?php echo $employee_id; ?></th>
-                      <td><?php echo $role; ?></td>
-                      <td><?php echo $mobile; ?></td>
-                      <td><?php echo $email; ?></td>
+                      <td><?php echo $compName; ?></th>
+                      <td><?php echo $enquire_details; ?></td>
+                      <td><?php echo $phone; ?></td>
+                      <td><?php echo $address; ?></td>
                       
                       <td>
-                          <button class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" data-bs-placement="top" title="View" onclick="goViewEmp(<?php echo $emp_id; ?>);" ><i class="lni lni-eye"></i></button>
-                          <button type="button" class="btn btn-sm btn-outline-warning" onclick="goEditEmp(<?php echo $emp_id; ?>);" data-bs-toggle="modal" data-bs-target="#editEmployeeModal"><i class="lni lni-pencil"></i></button>
+                          <!-- <button class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" data-bs-placement="top" title="View" onclick="goViewClient(<?php echo $enquire_id; ?>);" ><i class="lni lni-eye"></i></button> -->
+                          <button type="button" class="btn btn-sm btn-outline-warning" onclick="goEditEnquire(<?php echo $enquire_id; ?>);" data-bs-toggle="modal" data-bs-target="#editEnquireModal"><i class="lni lni-pencil"></i></button>
                          
                          
-                          <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" onclick="goDeleteEmployee(<?php echo $emp_id; ?>);"><i class="lni lni-trash"></i></button>
+                          <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" onclick="goDeleteEnquire(<?php echo $enquire_id; ?>);"><i class="lni lni-trash"></i></button>
                           
                       </td>
                     </tr>
@@ -121,9 +113,6 @@ WHERE employee_tbl.emp_status='Active'";
 	<!--end wrapper-->
 
 
-
-
-
 	<!--start switcher-->
 	<?php include("theme.php");?>
 	<!--end switcher-->
@@ -141,8 +130,9 @@ WHERE employee_tbl.emp_status='Active'";
     <script src="<?php echo $popper;?>"></script>
     <script src="<?php echo $bootStackPath;?>"></script>
 	<script src="<?php echo $sweetalert; ?>"></script>
-    <!-- Initialize tooltips -->
-    <script>
+
+     <!-- Initialize tooltips -->
+     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -151,44 +141,33 @@ WHERE employee_tbl.emp_status='Active'";
         });
     </script>
     <script>
-        function goViewEmp(id){
+        function goViewClient(id){
             
-            location.href = "employeeDetails.php?id="+id;
+            location.href = "clientDetails.php?id="+id;
 
         }
-function goEditEmp(id) 
+function goEditEnquire(id) 
   
   {
     $.ajax({
-        url: 'action/actEmployee.php',
+        url: 'action/actEnquire.php',
         method: 'POST',
         data: {
-            empId: id
+            editIdEnquire: id
         },
         dataType: 'json', // Specify the expected data type as JSON
         success: function(response) {
 			
 
-          $('#empId').val(response.emp_id);
-          $('#editFname').val(response.first_name);
-          $('#editLname').val(response.last_name);
-          $('#editPhone').val(response.phone);
-          $('#editPemail').val(response.personal_email);
-          $('#editCemail').val(response.company_email);
-          $('#editDob').val(response.dob);
-          $('#editAddress').val(response.address);
-          $('#editjDate').val(response.joining_date);
-          $('#editRole').val(response.role);
-          $('#editms').val(response.married_status);
-		  $('#editGender').val(response.gender);
-		  $('#editPayrole').val(response.pay_role);
-		  // Display the image if the URL is provided
-          if (response.img) {
-            console.log('Image URL:', response.img); // Debugging line
-                $('#editImage').attr('src', response.img).show();
-            } else {
-                $('#editImage').hide();
-            }
+          $('#editIdEnquire').val(response.enquire_id);
+          $('#EnameE').val(response.name);
+          $('#compNameE').val(response.comp_name);
+          $('#AddressE').val(response.address);
+          $('#EmailE').val(response.email);
+          $('#PhoneE').val(response.phone);
+          $('#detailsE').val(response.details);
+          
+		  
    
         },
         error: function(xhr, status, error) {
@@ -197,13 +176,13 @@ function goEditEmp(id)
         }
     });
 }
-function goDeleteEmployee(id)
+function goDeleteEnquire(id)
 {
     //alert(id);
-    if(confirm("Are you sure you want to delete Employee?"))
+    if(confirm("Are you sure you want to delete Enquire?"))
     {
       $.ajax({
-        url: 'action/actEmployee.php',
+        url: 'action/actEnquire.php',
         method: 'POST',
         data: {
           deleteId: id
@@ -253,15 +232,15 @@ function goDeleteEmployee(id)
 <script>
         $(document).ready(function () {
             $('#submitBtn').click(function () {
-                $('#addEmployee').submit();
+                $('#addEnquire').submit();
             });
 
-            $('#addEmployee').off('submit').on('submit', function(e) {
+            $('#addEnquire').off('submit').on('submit', function(e) {
                 e.preventDefault(); // Prevent the form from submitting normally
 
                 var formData = new FormData(this);
                 $.ajax({
-                    url: "action/actEmployee.php",
+                    url: "action/actEnquire.php",
                     method: 'POST',
                     data: formData,
                     contentType: false,
@@ -274,9 +253,8 @@ function goDeleteEmployee(id)
                                 text: response.message,
                                 timer: 2000
                             }).then(function() {
-                                $('#addEmployeeModal').modal('hide'); // Close the modal
+                                $('#addEnquireModal').modal('hide'); // Close the modal
                                 $('.modal-backdrop').remove(); // Remove the backdrop
-                                resetForm('addEmployee'); // Reset the form
                                 setTimeout(function() {
                                     $('#example2').load(location.href + ' #example2 > *', function() {
                                         $('#example2').DataTable().destroy();
@@ -304,7 +282,7 @@ function goDeleteEmployee(id)
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'An error occurred while adding employee data.'
+                            text: 'An error occurred while adding Enquire data.'
                         });
                         $('#submitBtn').prop('disabled', false);
                     }
@@ -312,7 +290,7 @@ function goDeleteEmployee(id)
             });
             // Reset the form when the close button is clicked
         $('#modalCloseBtn').click(function () {
-            resetForm('addEmployee');
+            resetForm('addEnquire');
         });
         });
 
@@ -325,12 +303,12 @@ function goDeleteEmployee(id)
 //--------------Handles edit employee-----------------------------//
 
 document.addEventListener('DOMContentLoaded', function() {
-    $('#editEmployee').off('submit').on('submit', function(e) {
+    $('#editEnquire').off('submit').on('submit', function(e) {
         e.preventDefault(); // Prevent the form from submitting normally
 
         var formData = new FormData(this);
         $.ajax({
-            url: "action/actEmployee.php",
+            url: "action/actEnquire.php",
             method: 'POST',
             data: formData,
             contentType: false,
@@ -345,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         text: response.message,
                         timer: 2000
                     }).then(function() {
-                        $('#editEmployeeModal').modal('hide'); // Close the modal
+                        $('#editEnquireModal').modal('hide'); // Close the modal
                         $('.modal-backdrop').remove(); // Remove the backdrop   
                         $('#example2').load(location.href + ' #example2 > *', function() {
                             $('#example2').DataTable().destroy();
@@ -369,11 +347,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'An error occurred while updating employee data.'
+                    text: 'An error occurred while updating Enquire data.'
                 });
                 $('#updateBtn').prop('disabled', false);
             }
         });
+    });
+    $('#updateBtn').on('click', function() {
+        $('#editEnquire').submit();
     });
 });
 

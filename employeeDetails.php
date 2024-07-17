@@ -1,6 +1,7 @@
 <?php
 session_start();
-    include("db/dbConnection.php");
+include("C:\\xampp\\htdocs\\ERP\\db\\dbConnection.php");
+include("../url.php");
     
     if(isset($_GET['id']) && $_GET['id'] != '') {
         $empId = $_GET['id'];
@@ -32,7 +33,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 			$emp_img = $row['emp_img'];
             $name=$fname." ".$lname; 
 			// Construct the image path
-			$image_path = "image/Employee/" . $emp_img;   
+			$image_path = $imageView . $emp_img;   
     
         } else {
             echo "Error executing query: " . $conn->error;
@@ -91,7 +92,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 				<div class="container">
 					<div class="main-body">
                     <div class="modal-footer p-2">
-                        <button type="button" class="btn btn-danger" onclick="javascript:location.href='employee.php'"><i class='bx bx-arrow-back'></i></button>
+                        <button type="button" class="btn btn-danger me-auto" onclick="javascript:location.href='employee.php'"><i class='bx bx-arrow-back'></i></button>
                     </div>
 						<div class="row">
 							<div class="col-lg-4">
@@ -230,17 +231,17 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 	<!--end switcher-->
 	<!-- Bootstrap JS -->
 	<!-- Bootstrap JS -->
-	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="<?php echo $bootsrapBundle; ?>"></script>
 	<!--plugins-->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
-	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
-	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-	<script src="assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
-	<script src="assets/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
+	<script src="<?php echo $js; ?>"></script>
+	<script src="<?php echo $simplebar;?>"></script>
+	<script src="<?php echo $mentimenu; ?>"></script>
+	<script src="<?php echo $perfectScrolbar;  ?>"></script>
+	<script src="<?php echo $datatableMin; ?>"></script>
+	<script src="<?php echo $datatbaleBootstrap;?>"></script>
      <!-- Include Bootstrap JS (with Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js"></script>
+    <script src="<?php echo $popper;?>"></script>
+    <script src="<?php echo $bootStackPath;?>"></script>
     <script>
         function goViewEmp(id){
             alert(id);
@@ -265,7 +266,7 @@ WHERE employee_tbl.emp_status='Active' AND employee_tbl.emp_id='$empId'";
 		} );
 	</script>
 	<!--app JS-->
-	<script src="assets/js/app.js"></script>
+	<script src="<?php echo $app; ?>"></script>
 </body>
 
 </html>

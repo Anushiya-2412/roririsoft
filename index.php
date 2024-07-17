@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
-
-<?php include("head.php");?>
+<?php include("C:\\xampp\\htdocs\\ERP\\db\\dbConnection.php");
+include("../url.php");
+ include("head.php");?>
 
 <body>
 	<!--wrapper-->
@@ -21,14 +22,14 @@
 							<div class="card-body">
 								<div class="d-flex align-items-center">
 									<div>
-										<p class="mb-0 text-secondary">Revenue</p>
-										<h4 class="my-1">$4805</h4>
-										<p class="mb-0 font-13 text-success"><i class='bx bxs-up-arrow align-middle'></i>$34 Since last week</p>
+										<p class="mb-0 text-secondary">Employees</p>
+										<h4 class="my-1"></h4>
+										<!-- <p class="mb-0 font-13 text-success"><i class='bx bxs-up-arrow align-middle'></i>$34 Since last week</p> -->
 									</div>
-									<div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-wallet'></i>
-									</div>
+									<!-- <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-wallet'></i>
+									</div> -->
 								</div>
-								<div id="chart1"></div>
+								<!-- <div id="chart1"></div> -->
 							</div>
 						</div>
 					</div>
@@ -1172,19 +1173,19 @@
 	<?php include("theme.php");?>
 	<!--end switcher-->
 	<!-- Bootstrap JS -->
-	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="<?php echo $bootsrapBundle; ?>"></script>
 	<!--plugins-->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
-	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
-	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-	<script src="assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
-	<script src="assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
-	<script src="assets/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
+	<script src="<?php echo $js; ?>"></script>
+	<script src="<?php echo $simplebar;?>"></script>
+	<script src="<?php echo $mentimenu; ?>"></script>
+	<script src="<?php echo $perfectScrolbar;  ?>"></script>
+	<script src="<?php echo $charts;  ?>"></script>
+	<script src="<?php echo $datatableMin; ?>"></script>
+	<script src="<?php echo $datatbaleBootstrap;?>"></script>
 	
-	<script src="assets/js/index.js"></script>
+	<script src="<?php echo $index;?>"></script>
 	<!--app JS-->
-	<script src="assets/js/app.js"></script>
+	<script src="<?php echo $app; ?>"></script>
 </body>
 
 </html>
